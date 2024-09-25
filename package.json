@@ -2,6 +2,7 @@
   "name": "the-turn",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,9 +10,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "next": "14.2.13",
+    "prisma": "^5.20.0",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.13"
+    "sass": "^1.79.3"
   },
   "devDependencies": {
     "eslint": "^8",
