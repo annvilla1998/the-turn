@@ -2,7 +2,6 @@
   "name": "the-turn",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,6 +10,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.20.0",
+    "@reduxjs/toolkit": "^2.2.7",
     "bcrypt": "^5.1.1",
     "next": "14.2.13",
     "next-auth": "^4.24.8",
