@@ -3,7 +3,7 @@ import SecondaryHeader from "@/components/layouts/SecondaryHeader";
 import styles from '@/styles/SignIn.module.scss';
 
 export default function SignIn() {
-  return <div>Sign In</div>;
+  return <div></div>;
 }
 
 SignIn.getLayout = function getLayout(page) {
