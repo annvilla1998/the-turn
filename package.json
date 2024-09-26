@@ -13,9 +13,14 @@
     "@prisma/client": "^5.20.0",
     "bcrypt": "^5.1.1",
     "next": "14.2.13",
+    "next-auth": "^4.24.8",
+    "next-redux-wrapper": "^8.1.0",
     "prisma": "^5.20.0",
     "react": "^18",
     "react-dom": "^18",
+    "redux": "^5.0.1",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^3.1.0",
     "sass": "^1.79.3"
   },
   "devDependencies": {

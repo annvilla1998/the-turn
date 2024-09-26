@@ -4,7 +4,7 @@ const users = [
   {
     name: "Daniel Gonzalez",
     email: "theturnvv@gmail.com",
-    password: "00l6=gPm2Bo",
+    password: process.env.DEFAULT_PW,
     owner: true,
   },
 ];
