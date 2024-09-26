@@ -1,5 +1,5 @@
-import React from "react";
-import SecondaryHeader from "@/components/layouts/SecondaryHeader";
+import React from 'react';
+import SecondaryHeader from '@/components/layouts/SecondaryHeader';
 import styles from '@/styles/SignIn.module.scss';
 
 export default function SignIn() {

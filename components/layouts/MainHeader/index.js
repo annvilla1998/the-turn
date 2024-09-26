@@ -1,6 +1,6 @@
-import React from "react";
-import styles from "./styles.module.scss";
-import Link from "next/link";
+import React from 'react';
+import styles from './styles.module.scss';
+import Link from 'next/link';
 
 export default function MainHeader({ children }) {
   return (

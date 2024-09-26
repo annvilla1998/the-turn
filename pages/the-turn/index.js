@@ -1,6 +1,6 @@
-import React from "react";
-import styles from "@/styles/TheTurn.module.scss";
-import SecondaryHeader from "@/components/layouts/SecondaryHeader";
+import React from 'react';
+import styles from '@/styles/TheTurn.module.scss';
+import SecondaryHeader from '@/components/layouts/SecondaryHeader';
 
 function TheTurn() {
   return <div></div>;

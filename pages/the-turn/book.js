@@ -1,6 +1,6 @@
-import React from "react";
-import styles from "@/styles/Book.module.scss";
-import SecondaryHeader from "@/components/layouts/SecondaryHeader";
+import React from 'react';
+import styles from '@/styles/Book.module.scss';
+import SecondaryHeader from '@/components/layouts/SecondaryHeader';
 
 export default function Book() {
   return <div>Book</div>;

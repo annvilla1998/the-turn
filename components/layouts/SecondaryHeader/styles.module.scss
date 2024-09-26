@@ -1,15 +1,14 @@
 .book_nav {
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  align-items: center;
+  background: rgba(187, 187, 187, 0.718);
+  box-shadow: $nav-shadow;
+  padding: 25px 55px;
+
+  &__list {
     display: flex;
-    justify-content: space-between;
-    height: 60px;
-    align-items: center;
-    background: rgba(187, 187, 187, 0.718);
-    box-shadow: $nav-shadow;
-    padding: 25px 55px;
-
-    &__list {
-        display: flex;
-        gap: 1.5rem;
-
-    }
+    gap: 1.5rem;
+  }
 }

@@ -1,5 +1,5 @@
-import React from "react";
-import MainHeader from "@/components/layouts/MainHeader";
+import React from 'react';
+import MainHeader from '@/components/layouts/MainHeader';
 
 export default function Memberships() {
   return <div>Memberships</div>;
