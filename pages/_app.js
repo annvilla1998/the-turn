@@ -11,6 +11,8 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }) {
+  const getLayout = Component.getLayout || ((page) => page);
+
   return (
     <>
       <Head>
@@ -28,7 +30,7 @@ export default function App({
       <SessionProvider session={session}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <Component {...pageProps} />
+            {getLayout(<Component {...pageProps} />)}
           </PersistGate>
         </Provider>
       </SessionProvider>

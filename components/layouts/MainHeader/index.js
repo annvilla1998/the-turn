@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./styles.module.scss";
 import Link from "next/link";
 
-export default function Header() {
+export default function MainHeader({ children }) {
   return (
     <header>
       <nav className={styles.nav}>
@@ -11,7 +11,7 @@ export default function Header() {
         </Link>
         <ul className={styles.nav__list}>
           <li>
-            <Link href="/book">Book Now</Link>
+            <Link href="/the-turn/book">Book Now</Link>
           </li>
           <li>
             <Link href="/memberships">Memberships</Link>
@@ -20,16 +20,17 @@ export default function Header() {
             <Link href="/events">Events</Link>
           </li>
           <li>
-            <Link href="/about">About us</Link>
+            <Link href="/the-turn/gift-cards">Gift Cards</Link>
           </li>
           <li>
-            <Link href="/gift-cards">Gift Cards</Link>
+            <Link href="/about-us">About us</Link>
           </li>
           <li>
-            <Link href="/contact">Contact Us</Link>
+            <Link href="/contact-us">Contact Us</Link>
           </li>
         </ul>
       </nav>
+      <main>{children}</main>
     </header>
   );
 }

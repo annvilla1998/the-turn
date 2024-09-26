@@ -1,10 +1,16 @@
-import Header from "@/components/header";
 import styles from "@/styles/Home.module.scss";
+import MainHeader from "@/components/layouts/MainHeader";
 
-export default function Home() {
+function Home() {
   return (
     <>
-      <Header />
+      Home
     </>
   );
 }
+
+Home.getLayout = function getLayout(page) {
+  return <MainHeader>{page}</MainHeader>
+}
+
+export default Home;
