@@ -1,12 +1,10 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "../lib/prisma.js";
 
 const users = [
   {
-    name: "Daniel",
+    name: "Daniel Gonzalez",
     email: "theturnvv@gmail.com",
-    password: "0£0l6=gPm2Bo",
+    password: "00l6=gPm2Bo",
     owner: true,
   },
 ];
