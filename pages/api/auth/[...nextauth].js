@@ -50,9 +50,9 @@ export default NextAuth({
   //       return session;
   //     },
   //   },
-  //   pages: {
-  //     'sign-in': '/sign-in',
-  //   },
+  pages: {
+    'sign-in': '/sign-in',
+  },
   session: {
     strategy: 'jwt',
     maxAge: 1 * 24 * 60 * 60,

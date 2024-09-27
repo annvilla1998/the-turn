@@ -2,7 +2,7 @@ import styles from '@/styles/Home.module.scss';
 import MainHeader from '@/components/layouts/MainHeader';
 
 function Home() {
-  return <>Home</>;
+  return <div className={styles.home}>Home</div>;
 }
 
 Home.getLayout = function getLayout(page) {

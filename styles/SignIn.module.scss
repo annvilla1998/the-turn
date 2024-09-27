@@ -1,11 +1,16 @@
 .login {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+
   &__container {
-    &__header {
-      &__logo {
-        img {
-          width: 200px;
-        }
-      }
-    }
+    padding: 4rem;
+  }
+
+  &__header {
+    
+  }
+  &__logo {
+      width: 200px;
   }
 }
