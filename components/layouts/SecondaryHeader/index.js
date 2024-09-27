@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.scss';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut, signIn } from 'next-auth/react';
 
 export default function SecondaryHeader({ children }) {
   const { data: session } = useSession();
@@ -10,7 +10,11 @@ export default function SecondaryHeader({ children }) {
     <header>
       <nav className={styles.book_nav}>
         <Link href="/">
-          <img src="" alt="The TurnVV" className={styles.book_nav__logo} />
+          <img
+            src="/images/logo.png"
+            alt="The TurnVV"
+            className={styles.book_nav__logo}
+          />
         </Link>
         <ul className={styles.book_nav__list}>
           <li>
@@ -23,7 +27,10 @@ export default function SecondaryHeader({ children }) {
             <Link href="/the-turn/gift-cards">Buy Gift Card</Link>
           </li>
           {session ? (
-            <Link href="/the-turn/sign-out">Sign Out</Link>
+            <div className={styles.book_nav__profile}>
+              <p>Hi, {session?.user?.name}!</p>
+              <span onClick={() => signOut()}>Sign Out</span>
+            </div>
           ) : (
             <Link href="/the-turn/sign-in">Sign In</Link>
           )}
