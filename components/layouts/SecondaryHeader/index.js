@@ -9,13 +9,7 @@ export default function SecondaryHeader({ children }) {
   return (
     <header>
       <nav className={styles.book_nav}>
-        <Link href="/">
-          <img
-            src="/images/logo.png"
-            alt="The TurnVV"
-            className={styles.book_nav__logo}
-          />
-        </Link>
+        <Link href="/">Home</Link>
         <ul className={styles.book_nav__list}>
           <li>
             <Link href="/the-turn/book">Book Now</Link>

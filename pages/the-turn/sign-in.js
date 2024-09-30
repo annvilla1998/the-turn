@@ -13,35 +13,18 @@ import {
   signIn,
 } from 'next-auth/react';
 import * as Yup from 'yup';
+import SignInContainer from '@/components/sign-in';
 
 const initialVal = {
   login_email: '',
   login_password: '',
-  name: '',
-  email: '',
-  password: '',
-  conf_password: '',
-  success: '',
-  error: '',
   login_error: '',
 };
 export default function SignIn({ providers, callbackUrl, csrfToken }) {
-  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(initialVal);
 
-  const {
-    login_email,
-    login_password,
-    name,
-    email,
-    password,
-    conf_password,
-    success,
-    error,
-    login_error,
-  } = user;
+  const { login_email, login_password, login_error } = user;
 
-  // Login
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
@@ -73,68 +56,76 @@ export default function SignIn({ providers, callbackUrl, csrfToken }) {
   };
 
   return (
-    // <>
-    <div className={styles.login}>
-      <div className={styles.login__container}>
-        <div className={styles.login__header}>
-          <img
-            className={styles.login__logo}
-            src="/images/logo.png"
-            alt="The TurnVV"
-          />
-        </div>
-        <div className={styles.login__form}>
-          <Formik
-            enableReinitialize
-            initialValues={{
-              login_email,
-              login_password,
-            }}
-            validationSchema={loginValidation}
-            onSubmit={() => {
-              signInHandler();
-            }}
-          >
-            {(form) => (
-              <Form method="post" action="/api/auth/sign-in/email">
-                <input
-                  type="hidden"
-                  name="csrfToken"
-                  defaultValue={csrfToken}
-                />
-                <LoginInput
-                  type="text"
-                  label="Email Address"
-                  name="login_email"
-                  icon="email"
-                  placeholder="Email Address"
-                  onChange={handleChange}
-                />
-                <LoginInput
-                  type="password"
-                  label="Password"
-                  name="login_password"
-                  icon="password"
-                  placeholder="Password"
-                  onChange={handleChange}
-                />
-                <Button type="submit" text="Sign in" />
-                {login_error && (
-                  <span className={styles.error}>{login_error}</span>
-                )}
-                <div className={styles.forgot}>
-                  <Link href="/auth/forgot">Forgot password?</Link>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
-      </div>
-    </div>
-    // </>
+    <SignInContainer>
+      <Formik
+        enableReinitialize
+        initialValues={{
+          login_email,
+          login_password,
+        }}
+        validationSchema={loginValidation}
+        onSubmit={() => {
+          signInHandler();
+        }}
+      >
+        {(form) => (
+          <Form method="post" action="/api/auth/sign-in/email">
+            <input type="hidden" name="csrfToken" defaultValue={csrfToken} />
+            <LoginInput
+              type="text"
+              label="Email Address"
+              name="login_email"
+              icon="email"
+              placeholder="Email Address"
+              onChange={handleChange}
+            />
+            <LoginInput
+              type="password"
+              label="Password"
+              name="login_password"
+              icon="password"
+              placeholder="Password"
+              onChange={handleChange}
+            />
+            <Button type="submit" text="Sign in" />
+            <div className={styles.forgot}>
+              <Link href="/auth/forgot">Forgot password?</Link>
+            </div>
+            <div>
+              <Link href="/the-turn/sign-up">Dont have an account?</Link>
+            </div>
+            {login_error && <span className={styles.error}>{login_error}</span>}
+          </Form>
+        )}
+      </Formik>
+    </SignInContainer>
   );
 }
 
 SignIn.getLayout = function getLayout(page) {
   return <SecondaryHeader>{page}</SecondaryHeader>;
 };
+
+export async function getServerSideProps(context) {
+  const { req, query } = context;
+
+  const session = await getSession({ req });
+  const { callbackUrl } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: callbackUrl,
+      },
+    };
+  }
+  const csrfToken = await getCsrfToken(context);
+  const providers = Object.values(await getProviders());
+  return {
+    props: {
+      providers,
+      csrfToken,
+      callbackUrl,
+    },
+  };
+}

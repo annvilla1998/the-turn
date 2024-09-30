@@ -1,0 +1,15 @@
+.login {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+
+  &__container {
+    padding: 4rem;
+  }
+
+  &__header {
+  }
+  &__logo {
+    width: 400px;
+  }
+}

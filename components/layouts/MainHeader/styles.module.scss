@@ -6,8 +6,12 @@
   font-size: 18px;
   font-weight: 400;
   padding: 35px 55px;
-  height: 100px;
+  height: 120px;
   background: $black;
+
+  &__logo {
+    width: 110px;
+  }
 
   &__list {
     display: flex;

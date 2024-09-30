@@ -7,7 +7,11 @@ export default function MainHeader({ children }) {
     <header>
       <nav className={styles.nav}>
         <Link href="/">
-          <img src="" alt="The TurnVV" className={styles.nav__logo} />
+          <img
+            src="/images/logo.png"
+            alt="The TurnVV"
+            className={styles.nav__logo}
+          />
         </Link>
         <ul className={styles.nav__list}>
           <li>
