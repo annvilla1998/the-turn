@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SecondaryHeader from '@/components/layouts/SecondaryHeader';
 import styles from '@/styles/SignIn.module.scss';
-import IconButton from '../../components/buttons/iconButton';
+import Button from '../../components/buttons/button';
 import LoginInput from '../../components/inputs/loginInput';
 import Link from 'next/link';
 import { Form, Formik } from 'formik';
@@ -51,7 +51,7 @@ export default function SignIn({ providers, callbackUrl, csrfToken }) {
     login_email: Yup.string()
       .required('Email address is required.')
       .email('Please enter a valid email address.'),
-    login_password: Yup.string().required('Please enter a password'),
+    login_password: Yup.string().required('Please enter a password.'),
   });
 
   const signInHandler = async () => {
@@ -104,6 +104,7 @@ export default function SignIn({ providers, callbackUrl, csrfToken }) {
                 />
                 <LoginInput
                   type="text"
+                  label="Email Address"
                   name="login_email"
                   icon="email"
                   placeholder="Email Address"
@@ -111,17 +112,18 @@ export default function SignIn({ providers, callbackUrl, csrfToken }) {
                 />
                 <LoginInput
                   type="password"
+                  label="Password"
                   name="login_password"
                   icon="password"
                   placeholder="Password"
                   onChange={handleChange}
                 />
-                <IconButton type="submit" text="Sign in" />
+                <Button type="submit" text="Sign in" />
                 {login_error && (
                   <span className={styles.error}>{login_error}</span>
                 )}
                 <div className={styles.forgot}>
-                  <Link href="/auth/forgot">Forgot password ?</Link>
+                  <Link href="/auth/forgot">Forgot password?</Link>
                 </div>
               </Form>
             )}
