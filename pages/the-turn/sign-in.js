@@ -20,9 +20,9 @@ const initialVal = {
   login_password: '',
   login_error: '',
 };
-export default function SignIn({ providers, callbackUrl, csrfToken }) {
+export default function SignIn({ callbackUrl, csrfToken }) {
   const [user, setUser] = useState(initialVal);
-
+  const [loading, setLoading] = useState(false);
   const { login_email, login_password, login_error } = user;
 
   const handleChange = (e) => {
@@ -51,12 +51,12 @@ export default function SignIn({ providers, callbackUrl, csrfToken }) {
       setLoading(false);
       setUser({ ...user, login_error: res?.error });
     } else {
-      return Router.push(callbackUrl || '/the-turn');
+      return Router.push(callbackUrl);
     }
   };
 
   return (
-    <SignInContainer>
+    <SignInContainer loading={loading}>
       <Formik
         enableReinitialize
         initialValues={{
@@ -115,17 +115,15 @@ export async function getServerSideProps(context) {
   if (session) {
     return {
       redirect: {
-        destination: callbackUrl,
+        destination: callbackUrl || '/the-turn/book',
       },
     };
   }
   const csrfToken = await getCsrfToken(context);
-  const providers = Object.values(await getProviders());
   return {
     props: {
-      providers,
       csrfToken,
-      callbackUrl,
+      callbackUrl: callbackUrl || '/the-turn/book',
     },
   };
 }

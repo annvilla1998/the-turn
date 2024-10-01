@@ -5,7 +5,7 @@ import { useSession, signOut, signIn } from 'next-auth/react';
 
 export default function SecondaryHeader({ children }) {
   const { data: session } = useSession();
-
+  console.log(session);
   return (
     <header>
       <nav className={styles.book_nav}>

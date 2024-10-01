@@ -37,19 +37,19 @@ export default NextAuth({
       },
     }),
   ],
-  //   callbacks: {
-  //     async session({ session, token }) {
-  //       let user = await prisma.user.findUnique({
-  //         where: {
-  //           id: token.sub,
-  //         },
-  //       });
-  //       session.user.id = token.sub;
-  //       session.user.role = user.role;
-  //       token.role = user.role;
-  //       return session;
-  //     },
+  // callbacks: {
+  //   async session({ session, token }) {
+  //     let user = await prisma.user.findUnique({
+  //       where: {
+  //         id: token.sub,
+  //       },
+  //     });
+  //     session.user.id = token.sub;
+  //     session.user.role = user.role;
+  //     token.role = user.role;
+  //     return session;
   //   },
+  // },
   pages: {
     'sign-in': '/sign-in',
   },

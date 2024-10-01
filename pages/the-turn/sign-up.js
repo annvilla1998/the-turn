@@ -66,7 +66,7 @@ export default function SignUp() {
           password: password,
         };
         const res = await signIn('credentials', options);
-        Router.push('/');
+        Router.push('/the-turn/book');
       }, 2000);
     } catch (error) {
       setLoading(false);
@@ -75,7 +75,7 @@ export default function SignUp() {
   };
 
   return (
-    <SignInContainer>
+    <SignInContainer loading={loading}>
       <Formik
         enableReinitialize
         initialValues={{
