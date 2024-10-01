@@ -9,6 +9,7 @@ import { signIn } from 'next-auth/react';
 import * as Yup from 'yup';
 import SignInContainer from '@/components/sign-in';
 import axios from 'axios';
+import Link from 'next/link';
 
 const initialVal = {
   name: '',
@@ -129,6 +130,9 @@ export default function SignUp() {
       </Formik>
       <div>{success && <span className={styles.success}>{success}</span>}</div>
       <div>{error && <span className={styles.error}>{error}</span>}</div>
+      <div>
+        <Link href="/the-turn/sign-in">Have an account?</Link>
+      </div>
     </SignInContainer>
   );
 }

@@ -88,13 +88,13 @@ export default function SignIn({ callbackUrl, csrfToken }) {
               onChange={handleChange}
             />
             <Button type="submit" text="Sign in" />
+            {login_error && <span className={styles.error}>{login_error}</span>}
             <div className={styles.forgot}>
               <Link href="/auth/forgot">Forgot password?</Link>
             </div>
             <div>
               <Link href="/the-turn/sign-up">Dont have an account?</Link>
             </div>
-            {login_error && <span className={styles.error}>{login_error}</span>}
           </Form>
         )}
       </Formik>

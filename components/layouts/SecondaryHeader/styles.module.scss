@@ -7,7 +7,6 @@
   box-shadow: $nav-shadow;
   padding: 25px 55px;
 
-
   &__list {
     display: flex;
     align-items: center;
@@ -28,6 +27,41 @@
       &:hover {
         opacity: 0.7;
       }
+    }
+  }
+
+  svg {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .book_nav {
+    &__list {
+      display: none;
+    }
+  }
+  .book_nav {
+    &__menu {
+      position: relative;
+      align-items: flex-start;
+      height: 260px;
+      .book_nav__list {
+        display: flex;
+        position: absolute;
+        top: 70px;
+        right: 0;
+        flex-direction: column;
+        width: 100%;
+        height: 190px;
+        justify-content: center;
+        background: rgba(187, 187, 187, 0.332);
+      }
+    }
+
+    svg {
+      display: block;
+      font-size: 30px;
     }
   }
 }

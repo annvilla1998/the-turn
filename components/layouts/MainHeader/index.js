@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './styles.module.scss';
 import Link from 'next/link';
+import { IoIosMenu } from 'react-icons/io';
+
+const menuUrls = [
+  { link: '/the-turn/book', label: 'Book Now' },
+  { link: '/memberships', label: 'Memberships' },
+  { link: '/events', label: 'Events' },
+  { link: '/the-turn/gift-cards', label: 'Gift Cards' },
+  { link: '/about-us', label: 'About Us' },
+  { link: '/contact-us', label: 'Contact' },
+];
 
 export default function MainHeader({ children }) {
+  const [showMenu, setShowMenu] = useState(false);
+
   return (
     <header>
-      <nav className={styles.nav}>
+      <nav className={`${styles.nav} ${showMenu ? styles.nav__menu : ''}`}>
         <Link href="/">
           <img
             src="/images/logo.png"
@@ -14,25 +26,21 @@ export default function MainHeader({ children }) {
           />
         </Link>
         <ul className={styles.nav__list}>
-          <li>
-            <Link href="/the-turn/book">Book Now</Link>
-          </li>
-          <li>
-            <Link href="/memberships">Memberships</Link>
-          </li>
-          <li>
-            <Link href="/events">Events</Link>
-          </li>
-          <li>
-            <Link href="/the-turn/gift-cards">Gift Cards</Link>
-          </li>
-          <li>
-            <Link href="/about-us">About us</Link>
-          </li>
-          <li>
-            <Link href="/contact-us">Contact Us</Link>
-          </li>
+          {menuUrls.map((item, i) => {
+            const { link, label } = item;
+
+            return (
+              <li key={i}>
+                <Link onClick={() => setShowMenu(false)} href={link}>
+                  {label}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
+        <IoIosMenu
+          onClick={() => (showMenu ? setShowMenu(false) : setShowMenu(true))}
+        />
       </nav>
       <main>{children}</main>
     </header>

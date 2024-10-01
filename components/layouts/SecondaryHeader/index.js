@@ -1,34 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './styles.module.scss';
 import Link from 'next/link';
-import { useSession, signOut, signIn } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
+import { IoIosMenu } from 'react-icons/io';
+
+const menuUrls = [
+  { link: '/the-turn/book', label: 'Book Now' },
+  { link: '/the-turn/membership', label: 'Buy Membership' },
+  { link: '/the-turn/gift-cards', label: 'Buy Gift Card' },
+];
 
 export default function SecondaryHeader({ children }) {
   const { data: session } = useSession();
-  console.log(session);
+  const [showMenu, setShowMenu] = useState(false);
+
   return (
     <header>
-      <nav className={styles.book_nav}>
+      <nav
+        className={`${styles.book_nav} ${showMenu ? styles.book_nav__menu : ''}`}
+      >
         <Link href="/">Home</Link>
+
         <ul className={styles.book_nav__list}>
-          <li>
-            <Link href="/the-turn/book">Book Now</Link>
-          </li>
-          <li>
-            <Link href="/the-turn/membership">Buy Membership</Link>
-          </li>
-          <li>
-            <Link href="/the-turn/gift-cards">Buy Gift Card</Link>
-          </li>
+          {menuUrls.map((item, i) => {
+            const { link, label } = item;
+
+            return (
+              <li key={i}>
+                <Link onClick={() => setShowMenu(false)} href={link}>
+                  {label}
+                </Link>
+              </li>
+            );
+          })}
           {session ? (
             <div className={styles.book_nav__profile}>
               <p>Hi, {session?.user?.name}!</p>
               <span onClick={() => signOut()}>Sign Out</span>
             </div>
           ) : (
-            <Link href="/the-turn/sign-in">Sign In</Link>
+            <Link onClick={() => setShowMenu(false)} href="/the-turn/sign-in">
+              Sign In
+            </Link>
           )}
         </ul>
+        <IoIosMenu
+          onClick={() => (showMenu ? setShowMenu(false) : setShowMenu(true))}
+        />
       </nav>
       <main>{children}</main>
     </header>
