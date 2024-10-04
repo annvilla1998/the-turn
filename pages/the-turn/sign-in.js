@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import SecondaryHeader from '@/components/layouts/SecondaryHeader';
 import styles from '@/styles/SignIn.module.scss';
 import Button from '../../components/buttons/button';
-import LoginInput from '../../components/inputs/loginInput';
+import Input from '../../components/inputs/input';
 import Link from 'next/link';
 import { Form, Formik } from 'formik';
 import Router from 'next/router';
@@ -71,7 +71,7 @@ export default function SignIn({ callbackUrl, csrfToken }) {
         {(form) => (
           <Form method="post" action="/api/auth/sign-in/email">
             <input type="hidden" name="csrfToken" defaultValue={csrfToken} />
-            <LoginInput
+            <Input
               type="text"
               label="Email Address"
               name="login_email"
@@ -79,7 +79,7 @@ export default function SignIn({ callbackUrl, csrfToken }) {
               placeholder="Email Address"
               onChange={handleChange}
             />
-            <LoginInput
+            <Input
               type="password"
               label="Password"
               name="login_password"

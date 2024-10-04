@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import SecondaryHeader from '@/components/layouts/SecondaryHeader';
 import styles from '@/styles/SignIn.module.scss';
 import Button from '../../components/buttons/button';
-import LoginInput from '../../components/inputs/loginInput';
+import Input from '../../components/inputs/input';
 import { Form, Formik } from 'formik';
 import Router from 'next/router';
 import { signIn } from 'next-auth/react';
@@ -92,7 +92,7 @@ export default function SignUp() {
       >
         {(form) => (
           <Form>
-            <LoginInput
+            <Input
               type="text"
               label="Name"
               name="name"
@@ -100,7 +100,7 @@ export default function SignUp() {
               placeholder="Full Name"
               onChange={handleChange}
             />
-            <LoginInput
+            <Input
               type="text"
               label="Email Address"
               name="email"
@@ -108,7 +108,7 @@ export default function SignUp() {
               placeholder="Email Address"
               onChange={handleChange}
             />
-            <LoginInput
+            <Input
               type="password"
               label="Password"
               name="password"
@@ -116,7 +116,7 @@ export default function SignUp() {
               placeholder="Password"
               onChange={handleChange}
             />
-            <LoginInput
+            <Input
               type="password"
               label="Confirm Password"
               name="conf_password"

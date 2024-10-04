@@ -1,7 +1,7 @@
 import styles from './styles.module.scss';
 import { ErrorMessage, useField } from 'formik';
 
-export default function LoginInput({ label, placeholder, ...props }) {
+export default function Input({ label, placeholder, ...props }) {
   const [field, meta] = useField(props);
   return (
     <div
