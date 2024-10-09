@@ -9,7 +9,7 @@ export default function Input({ label, placeholder, ...props }) {
         meta.touched && meta.error ? styles.error : ''
       }`}
     >
-      <label for={label}>{label}</label>
+      <label htmlFor={label}>{label}</label>
       <input
         id={label}
         type={field.type}
