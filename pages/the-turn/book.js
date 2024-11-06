@@ -20,17 +20,20 @@ export default function Book() {
 
   return (
     <div className={styles.book}>
+      <h1>Reserve</h1>
       <Formik enableReinitialize initialValues={{ date, time }}>
         {(form) => (
           <Form>
-            <Calendar
-              maxDate={next30DaysTimestamp}
-              minDate={new Date()}
-              onChange={onChange}
-              value={value}
-            />
-            <div className={styles.book__available_times}>
-              <TimeButton time={'10:00 am'} />
+            <div className={styles.book__calendar}>
+              <Calendar
+                maxDate={next30DaysTimestamp}
+                minDate={new Date()}
+                onChange={onChange}
+                value={value}
+              />
+              <div className={styles.book__available_times}>
+                <TimeButton time={'10:00 am'} />
+              </div>
             </div>
           </Form>
         )}
