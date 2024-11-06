@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { validateEmail } from '@/utils/validation';
 import prisma from '@/lib/prisma';
 import { createActivationToken } from '@/utils/tokens';
+import { randString } from '@/utils/randString';
 
 const router = createRouter();
 
@@ -39,6 +40,7 @@ router.post(async (req, res) => {
         name,
         email,
         password,
+        unique_str: randString(),
       },
     });
 

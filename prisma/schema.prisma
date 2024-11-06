@@ -20,6 +20,8 @@ model User {
   password     String
   owner        Boolean       @default(false)
   member       Boolean       @default(false)
+  verified     Boolean       @default(false)
+  unique_str   String        @unique @db.VarChar(25)
   Reservations Reservation[]
   created_at   DateTime      @default(now())
   updated_at   DateTime      @updatedAt
@@ -30,8 +32,8 @@ model Reservation {
   user           User     @relation(fields: [user_id], references: [id])
   user_id        Int      @unique
   date           DateTime
-  service_time   String
-  time           DateTime
+  service_time   Float
+  time           String
   payment_status Boolean
   note           String?  @db.VarChar(400)
   occasion       String?

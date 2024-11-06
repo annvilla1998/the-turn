@@ -6,6 +6,8 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "owner" BOOLEAN NOT NULL DEFAULT false,
     "member" BOOLEAN NOT NULL DEFAULT false,
+    "verified" BOOLEAN NOT NULL DEFAULT false,
+    "unique_str" VARCHAR(25) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -17,8 +19,8 @@ CREATE TABLE "Reservation" (
     "id" SERIAL NOT NULL,
     "user_id" INTEGER NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
-    "service_time" TEXT NOT NULL,
-    "time" TIMESTAMP(3) NOT NULL,
+    "service_time" DOUBLE PRECISION NOT NULL,
+    "time" TEXT NOT NULL,
     "payment_status" BOOLEAN NOT NULL,
     "note" VARCHAR(400),
     "occasion" TEXT,
@@ -30,6 +32,9 @@ CREATE TABLE "Reservation" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_unique_str_key" ON "User"("unique_str");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Reservation_user_id_key" ON "Reservation"("user_id");
