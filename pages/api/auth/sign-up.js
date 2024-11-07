@@ -1,6 +1,7 @@
 import { createRouter } from 'next-connect';
 import bcrypt from 'bcrypt';
 import { validateEmail } from '@/utils/validation';
+import { sendEmail } from '@/utils/sendEmail';
 import prisma from '@/lib/prisma';
 import { createActivationToken } from '@/utils/tokens';
 import { randString } from '@/utils/randString';
@@ -35,14 +36,18 @@ router.post(async (req, res) => {
         .json({ message: 'Password must be at least 6 characters.' });
     }
 
+    const randStr = randString();
+
     const newUser = await prisma.user.create({
       data: {
         name,
         email,
         password,
-        unique_str: randString(),
+        unique_str: randStr,
       },
     });
+
+    sendEmail(name, email, randStr);
 
     res.json({ message: 'Regiser success!' });
   } catch (e) {

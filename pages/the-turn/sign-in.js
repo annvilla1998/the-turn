@@ -69,7 +69,7 @@ export default function SignIn({ callbackUrl, csrfToken }) {
         }}
       >
         {(form) => (
-          <Form method="post" action="/api/auth/sign-in/email">
+          <Form method="post" action="/api/auth/signin/email">
             <input type="hidden" name="csrfToken" defaultValue={csrfToken} />
             <Input
               type="text"
