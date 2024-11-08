@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchUser } from '../../store/user';
 import SecondaryHeader from '@/components/layouts/SecondaryHeader';
-import styles from '@/styles/SignIn.module.scss';
 import Button from '../../components/buttons/button';
 import Input from '../../components/inputs/input';
 import Link from 'next/link';
@@ -88,9 +87,9 @@ export default function SignIn({ callbackUrl, csrfToken }) {
               placeholder="Password"
               onChange={handleChange}
             />
-            <Button type="submit" text="Sign in" />
-            {login_error && <span className={styles.error}>{login_error}</span>}
-            <div className={styles.forgot}>
+            <Button type="submit">Sign In</Button>
+            {login_error && <span className="error">{login_error}</span>}
+            <div>
               <Link href="/auth/forgot">Forgot password?</Link>
             </div>
             <div>

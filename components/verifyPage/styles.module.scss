@@ -5,13 +5,10 @@
     min-height: 90vh;
     margin: 0;
     flex-direction: column;
-    gap: 30px;
+    gap: 10px;
 
     &__resend_button {
-        padding: 10px 15px;
-        border-radius: 10px;
-        background: $logo-blue;
-        color: white;
-        cursor: pointer;
+        width: 400px;
+        text-align: center;
     }
 }

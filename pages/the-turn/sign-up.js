@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchUser } from '../../store/user';
 import SecondaryHeader from '@/components/layouts/SecondaryHeader';
-import styles from '@/styles/SignIn.module.scss';
 import Button from '../../components/buttons/button';
 import Input from '../../components/inputs/input';
 import { Form, Formik } from 'formik';
@@ -37,8 +36,8 @@ export default function SignUp() {
   const registerValidation = Yup.object({
     name: Yup.string()
       .required('Please enter your name.')
-      .min(2, 'First name must be between 2 and 16 characters.')
-      .max(16, 'First name must be between 2 and 16 characters.')
+      .min(2, 'First name must be between 2 and 50 characters.')
+      .max(50, 'First name must be between 2 and 50 characters.')
       .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed.'),
     email: Yup.string()
       .required('Please enter your email address.')
@@ -47,7 +46,7 @@ export default function SignUp() {
       .required(
         'Enter a combination of at least six numbers, letters and special characters.'
       )
-      .min(6, 'Password must be atleast 6 characters.')
+      .min(6, 'Password must be at least 6 characters.')
       .max(36, "Password can't be more than 36 characters"),
     conf_password: Yup.string()
       .required('Confirm your password.')
@@ -64,7 +63,6 @@ export default function SignUp() {
       });
       dispatch(fetchUser(email));
       setUser({ ...user, error: '', success: data.message });
-      setLoading(false);
       setTimeout(async () => {
         let options = {
           redirect: false,
@@ -74,6 +72,7 @@ export default function SignUp() {
         const res = await signIn('credentials', options);
         Router.push('/the-turn/book');
       }, 2000);
+      setLoading(false);
     } catch (error) {
       setLoading(false);
       setUser({ ...user, success: '', error: error.message });
@@ -129,12 +128,12 @@ export default function SignUp() {
               placeholder="Re-Type Password"
               onChange={handleChange}
             />
-            <Button type="submit" text="Sign up" />
+            <Button type="submit">Sign Up</Button>
           </Form>
         )}
       </Formik>
-      <div>{success && <span className={styles.success}>{success}</span>}</div>
-      <div>{error && <span className={styles.error}>{error}</span>}</div>
+      <div>{success && <span className="success">{success}</span>}</div>
+      <div>{error && <span className="error">{error}</span>}</div>
       <div>
         <Link href="/the-turn/sign-in">Have an account?</Link>
       </div>

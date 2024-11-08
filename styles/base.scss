@@ -12,3 +12,15 @@ $error-red: rgb(236, 63, 63);
   justify-content: center;
   align-items: center;
 }
+
+.error {
+  color: $error-red;
+  font-weight: 700;
+  margin: 5px 0;
+  display: block;
+}
+
+.success {
+  color: #6e6e6e;
+  font-weight: 700;
+}
