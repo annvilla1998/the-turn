@@ -3,9 +3,13 @@ import { combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
-import reservation from './reservation';
+import reservationReducer from './reservation';
+import userReducer from './user';
 
-const reducers = combineReducers({ reservation });
+const reducers = combineReducers({
+  reservation: reservationReducer,
+  user: userReducer,
+});
 
 const config = {
   key: 'root',

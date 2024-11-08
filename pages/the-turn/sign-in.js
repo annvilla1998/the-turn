@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchUser } from '../../store/user';
 import SecondaryHeader from '@/components/layouts/SecondaryHeader';
 import styles from '@/styles/SignIn.module.scss';
 import Button from '../../components/buttons/button';
@@ -6,12 +8,7 @@ import Input from '../../components/inputs/input';
 import Link from 'next/link';
 import { Form, Formik } from 'formik';
 import Router from 'next/router';
-import {
-  getCsrfToken,
-  getProviders,
-  getSession,
-  signIn,
-} from 'next-auth/react';
+import { getCsrfToken, getSession, signIn } from 'next-auth/react';
 import * as Yup from 'yup';
 import SignInContainer from '@/components/sign-in';
 
@@ -24,6 +21,7 @@ export default function SignIn({ callbackUrl, csrfToken }) {
   const [user, setUser] = useState(initialVal);
   const [loading, setLoading] = useState(false);
   const { login_email, login_password, login_error } = user;
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,6 +42,9 @@ export default function SignIn({ callbackUrl, csrfToken }) {
       email: login_email,
       password: login_password,
     };
+
+    dispatch(fetchUser(login_email));
+
     const res = await signIn('credentials', options);
     setUser({ ...user, success: '', error: '' });
     setLoading(false);

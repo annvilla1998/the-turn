@@ -31,7 +31,7 @@ router.get(async (req, res) => {
       },
     });
 
-    res.status(200).json({ message: 'Verification success!' });
+    res.status(200).redirect('/the-turn/verification-confirmation');
   } catch (e) {
     res.status(500).json({ message: e.message });
   }

@@ -4,7 +4,9 @@ import { Form, Formik } from 'formik';
 import SecondaryHeader from '@/components/layouts/SecondaryHeader';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { useSelector } from 'react-redux';
 import TimeButton from '@/components/buttons/timeButton';
+import VerifyPage from '@/components/verifyPage';
 
 const initial = {
   date: new Date(),
@@ -13,10 +15,16 @@ const initial = {
 export default function Book() {
   const [value, onChange] = useState(new Date());
   const { date, time } = initial;
-
+  const user = useSelector((state) => state.user?.currentUser);
   const now = new Date();
   const next30Days = now.getTime() + 30 * 24 * 60 * 60 * 1000;
   const next30DaysTimestamp = new Date(next30Days);
+
+  const verifyPage = <VerifyPage user={user} />;
+
+  if (user !== null && user.verified === false) {
+    return verifyPage;
+  }
 
   return (
     <div className={styles.book}>

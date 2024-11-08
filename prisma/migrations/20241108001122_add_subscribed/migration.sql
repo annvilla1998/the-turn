@@ -7,6 +7,7 @@ CREATE TABLE "User" (
     "owner" BOOLEAN NOT NULL DEFAULT false,
     "member" BOOLEAN NOT NULL DEFAULT false,
     "verified" BOOLEAN NOT NULL DEFAULT false,
+    "subscribed" BOOLEAN NOT NULL DEFAULT false,
     "unique_str" VARCHAR(25) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,

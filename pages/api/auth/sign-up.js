@@ -49,7 +49,7 @@ router.post(async (req, res) => {
 
     sendEmail(name, email, randStr);
 
-    res.json({ message: 'Regiser success!' });
+    res.json({ message: 'Register success!' });
   } catch (e) {
     res.status(500).json({ message: e.message });
   }

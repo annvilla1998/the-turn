@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchUser } from '../../store/user';
 import SecondaryHeader from '@/components/layouts/SecondaryHeader';
 import styles from '@/styles/SignIn.module.scss';
 import Button from '../../components/buttons/button';
@@ -16,12 +18,14 @@ const initialVal = {
   email: '',
   password: '',
   conf_password: '',
+  verified: false,
   success: '',
   error: '',
 };
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(initialVal);
+  const dispatch = useDispatch();
 
   const { name, email, password, conf_password, success, error } = user;
 
@@ -58,6 +62,7 @@ export default function SignUp() {
         email,
         password,
       });
+      dispatch(fetchUser(email));
       setUser({ ...user, error: '', success: data.message });
       setLoading(false);
       setTimeout(async () => {
@@ -71,7 +76,7 @@ export default function SignUp() {
       }, 2000);
     } catch (error) {
       setLoading(false);
-      setUser({ ...user, success: '', error: error.response.data.message });
+      setUser({ ...user, success: '', error: error.message });
     }
   };
 

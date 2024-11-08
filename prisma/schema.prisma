@@ -21,6 +21,7 @@ model User {
   owner        Boolean       @default(false)
   member       Boolean       @default(false)
   verified     Boolean       @default(false)
+  subscribed   Boolean       @default(false)
   unique_str   String        @unique @db.VarChar(25)
   Reservations Reservation[]
   created_at   DateTime      @default(now())

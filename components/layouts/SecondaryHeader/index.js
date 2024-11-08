@@ -3,6 +3,8 @@ import styles from './styles.module.scss';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { IoIosMenu } from 'react-icons/io';
+import { useDispatch, useSelector } from 'react-redux';
+import { signOutReducer } from '../../../store/user';
 
 const menuUrls = [
   { link: '/the-turn/book', label: 'Book Now' },
@@ -13,6 +15,12 @@ const menuUrls = [
 export default function SecondaryHeader({ children }) {
   const { data: session } = useSession();
   const [showMenu, setShowMenu] = useState(false);
+  const dispatch = useDispatch();
+
+  const signOutHandler = () => {
+    dispatch(signOutReducer());
+    signOut();
+  };
 
   return (
     <header>
@@ -36,7 +44,7 @@ export default function SecondaryHeader({ children }) {
           {session ? (
             <div className={styles.book_nav__profile}>
               <p>Hi, {session?.user?.name}!</p>
-              <span onClick={() => signOut()}>Sign Out</span>
+              <span onClick={signOutHandler}>Sign Out</span>
             </div>
           ) : (
             <Link onClick={() => setShowMenu(false)} href="/the-turn/sign-in">
