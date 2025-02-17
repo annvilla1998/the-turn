@@ -7,12 +7,12 @@ export default function VerifyPage({ user }) {
 
   const resendVerification = async () => {
     try {
-      const res = await fetch(`/api/send-email/${user.id}`);
+      const res = await fetch(`/api/send-email/${user.id}?purpose=confirmation`);
       if (res.ok) {
         console.log('Email sent successfully.');
-        setMessage({ success: 'Message re-sent', error: null });
+        setMessage({ success: 'Message re-sent. Please check your email.', error: null });
       } else {
-        setMessage({ error: 'Message re-sent', success: null });
+        setMessage({ error: 'Failed to send email. Please try again or contact us for help.', success: null });
         console.error('Failed to send email.');
       }
     } catch (e) {

@@ -1,11 +1,12 @@
 import { createRouter } from 'next-connect';
 import prisma from '@/lib/prisma';
+import bcrypt from 'bcrypt';
 
 const router = createRouter();
 
 router.get(async (req, res) => {
   try {
-    const { token, email } = req.query;
+    const { token, email, reset } = req.query;
 
     const user = await prisma.user.findFirst({
       where: {
@@ -22,16 +23,20 @@ router.get(async (req, res) => {
       return;
     }
 
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        verified: true,
-      },
-    });
+    if (reset) {
+      res.status(200).redirect(`/the-turn/reset/${bcrypt.hashSync(token, 10)}?email=${email}`);
+    } else {
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          verified: true,
+        },
+      });
 
-    res.status(200).redirect('/the-turn/verification-confirmation');
+      res.status(200).redirect('/the-turn/verification-confirmation');
+    }
   } catch (e) {
     res.status(500).json({ message: e.message });
   }

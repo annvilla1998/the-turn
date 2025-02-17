@@ -100,7 +100,6 @@ export default function SignUp() {
               type="text"
               label="Name"
               name="name"
-              icon="user"
               placeholder="Full Name"
               onChange={handleChange}
             />
@@ -108,7 +107,6 @@ export default function SignUp() {
               type="text"
               label="Email Address"
               name="email"
-              icon="email"
               placeholder="Email Address"
               onChange={handleChange}
             />
@@ -116,7 +114,6 @@ export default function SignUp() {
               type="password"
               label="Password"
               name="password"
-              icon="password"
               placeholder="Password"
               onChange={handleChange}
             />
@@ -124,7 +121,6 @@ export default function SignUp() {
               type="password"
               label="Confirm Password"
               name="conf_password"
-              icon="password"
               placeholder="Re-Type Password"
               onChange={handleChange}
             />

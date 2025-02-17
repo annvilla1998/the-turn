@@ -75,7 +75,6 @@ export default function SignIn({ callbackUrl, csrfToken }) {
               type="text"
               label="Email Address"
               name="login_email"
-              icon="email"
               placeholder="Email Address"
               onChange={handleChange}
             />
@@ -83,14 +82,13 @@ export default function SignIn({ callbackUrl, csrfToken }) {
               type="password"
               label="Password"
               name="login_password"
-              icon="password"
               placeholder="Password"
               onChange={handleChange}
             />
             <Button type="submit">Sign In</Button>
             {login_error && <span className="error">{login_error}</span>}
             <div>
-              <Link href="/auth/forgot">Forgot password?</Link>
+              <Link href="/the-turn/forgot">Forgot password?</Link>
             </div>
             <div>
               <Link href="/the-turn/sign-up">Dont have an account?</Link>

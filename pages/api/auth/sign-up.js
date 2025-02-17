@@ -1,9 +1,7 @@
 import { createRouter } from 'next-connect';
-import bcrypt from 'bcrypt';
 import { validateEmail } from '@/utils/validation';
 import { sendEmail } from '@/utils/sendEmail';
 import prisma from '@/lib/prisma';
-import { createActivationToken } from '@/utils/tokens';
 import { randString } from '@/utils/randString';
 
 const router = createRouter();
@@ -47,7 +45,7 @@ router.post(async (req, res) => {
       },
     });
 
-    sendEmail(name, email, randStr);
+    sendEmail(name, email, randStr, "confirmation");
 
     res.json({ message: 'Register success!' });
   } catch (e) {
