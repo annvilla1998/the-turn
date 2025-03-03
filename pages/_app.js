@@ -5,6 +5,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import Head from 'next/head';
 import { SessionProvider } from 'next-auth/react';
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 let persistor = persistStore(store);
 
 export default function App({
@@ -12,6 +14,13 @@ export default function App({
   pageProps: { session, ...pageProps },
 }) {
   const getLayout = Component.getLayout || ((page) => page);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const isWhiteBackground = router.pathname.includes("the-turn");
+    document.documentElement.style.backgroundColor = isWhiteBackground ? "#ffffff" : "#000000";
+  }, [router.pathname]);
 
   return (
     <>

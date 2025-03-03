@@ -5,9 +5,12 @@ import ProtectedRoute from '@/components/protected-route';
 
 export default function Membership() {
   return (
-    <ProtectedRoute>
-      <div>Membership</div>
-    </ProtectedRoute>
+    <div className="coming-soon">
+      <h1>COMING SOON</h1>
+    </div>
+    // <ProtectedRoute>
+    //   <div>Membership</div>
+    // </ProtectedRoute>
   );
 }
 

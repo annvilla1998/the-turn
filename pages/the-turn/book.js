@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import styles from '@/styles/Book.module.scss';
-import { Form, Formik } from 'formik';
-import SecondaryHeader from '@/components/layouts/SecondaryHeader';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import TimeButton from '@/components/buttons/time-button';
-import ProtectedRoute from '@/components/protected-route';
+import React, { useState } from "react";
+import styles from "@/styles/Book.module.scss";
+import { Form, Formik } from "formik";
+import SecondaryHeader from "@/components/layouts/SecondaryHeader";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import TimeButton from "@/components/buttons/time-button";
+import ProtectedRoute from "@/components/protected-route";
 
 const initial = {
   date: new Date(),
-  time: '',
+  time: "",
 };
 export default function Book() {
   const [value, onChange] = useState(new Date());
@@ -19,28 +19,35 @@ export default function Book() {
   const next30DaysTimestamp = new Date(next30Days);
 
   return (
-    <ProtectedRoute>
-      <div className={styles.book}>
-        <h1>Reserve</h1>
-        <Formik enableReinitialize initialValues={{ date, time }}>
-          {(form) => (
-            <Form>
-              <div className={styles.book__calendar}>
-                <Calendar
-                  maxDate={next30DaysTimestamp}
-                  minDate={new Date()}
-                  onChange={onChange}
-                  value={value}
-                />
-                <div className={styles.book__available_times}>
-                  <TimeButton time={'10:00 am'} />
-                </div>
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </div>
-    </ProtectedRoute>
+    <div className="coming-soon">
+      <h1>COMING SOON</h1>
+      <p>
+        We are still under construction but you will be able to book with us
+        soon!
+      </p>
+    </div>
+    // <ProtectedRoute>
+    //   <div className={styles.book}>
+    //     <h1>Reserve</h1>
+    //     <Formik enableReinitialize initialValues={{ date, time }}>
+    //       {(form) => (
+    //         <Form>
+    //           <div className={styles.book__calendar}>
+    //             <Calendar
+    //               maxDate={next30DaysTimestamp}
+    //               minDate={new Date()}
+    //               onChange={onChange}
+    //               value={value}
+    //             />
+    //             <div className={styles.book__available_times}>
+    //               <TimeButton time={'10:00 am'} />
+    //             </div>
+    //           </div>
+    //         </Form>
+    //       )}
+    //     </Formik>
+    //   </div>
+    // </ProtectedRoute>
   );
 }
 

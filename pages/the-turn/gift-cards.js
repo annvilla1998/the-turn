@@ -5,9 +5,12 @@ import ProtectedRoute from '@/components/protected-route';
 
 export default function GiftCards() {
   return (
-    <ProtectedRoute>
-      <div>Gift Cards</div>
-    </ProtectedRoute>
+    <div className="coming-soon">
+      <h1>COMING SOON</h1>
+    </div>
+    // <ProtectedRoute>
+    //   <div>Gift Cards</div>
+    // </ProtectedRoute>
   );
 }
 

@@ -6,7 +6,10 @@
   font-size: 18px;
   font-weight: 400;
   padding: 20px 55px;
-  background: $black;
+  background: $black-opaque;
+  position: fixed;
+  width: 100%;
+  z-index: 100;
 
   &__logo {
     width: 110px;
