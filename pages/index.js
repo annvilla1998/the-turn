@@ -36,11 +36,13 @@ function Home() {
           <br />
           Experience the future of golf in a relaxed, social atmosphere—whether
           you're an avid golfer or a newcomer, we’ve got something for everyone.
-          <br />
-          <br />
-          Hourly Rates: $50
         </p>
         <img src="/images/construction.jpeg" />
+      </section>
+      <section className={styles.hourly_rates}>
+        <h2>Hourly Rates: $50/hr</h2>
+        <h2>Monday-Friday 10am - 9pm</h2>
+        <p>Special times for corporate event rentals</p>
       </section>
     </div>
   );
