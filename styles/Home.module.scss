@@ -66,5 +66,10 @@
         width: 100%;
       }
     }
+
+    .hourly_rates {
+      flex-direction: column;
+      gap: 40px;
+    }
   }
 }

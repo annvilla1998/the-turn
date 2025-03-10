@@ -15,7 +15,8 @@
   }
 
   &__terms {
-    align-self: flex-end;
+    display: flex;
+    align-items: flex-end;
     cursor: pointer;
   }
 
@@ -48,4 +49,18 @@
       font-size: 1.5rem;
     }
   }
+}
+
+@media (max-width: 900px) {
+    .footer {
+        &__content {
+            flex-direction: column;
+        }
+
+        &__terms {
+            display: flex;
+            align-items: flex-start;
+            margin-top: 15px;
+          }
+    }
 }

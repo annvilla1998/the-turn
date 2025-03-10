@@ -10,6 +10,7 @@ const cardStyles = {
       boxShadow: 3, // Adds a shadow effect on hover
       transition: "transform 0.2s ease-in-out", // Smoothens the scaling effect
     },
+    width: "300px"
   };
   
 
