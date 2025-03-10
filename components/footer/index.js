@@ -48,6 +48,9 @@ export default function Footer() {
               <MdEmail /> TheTurnVV@gmail.com
             </Link>
           </li>
+          <li>
+          <p>Monday - Friday <strong>10am - 9pm</strong></p>
+          </li>
         </ul>
         <Stack className={styles.footer__terms} spacing={1}>
           <Privacy style={style} />

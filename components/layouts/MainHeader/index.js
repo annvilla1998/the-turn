@@ -5,7 +5,11 @@ import { IoIosMenu } from "react-icons/io";
 import Footer from "@/components/footer";
 
 const menuUrls = [
-  { link: "/the-turn/book", label: "Book Now" },
+  // { link: "/the-turn/book", label: "Book Now" },
+  {
+    link: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ1-ffmi662iw7iSin3K1u5-txijie6XwYO6m2x5Nd8A75C8qyRxOs8lxqiKIDtt1kvDM6xiDdl-",
+    label: "Book Now",
+  },
   // { link: '/memberships', label: 'Memberships' },
   // { link: '/events', label: 'Events' },
   { link: "/the-turn/gift-cards", label: "Gift Cards" },
@@ -33,7 +37,10 @@ export default function MainHeader({ children }) {
 
               return (
                 <li key={i}>
-                  <Link onClick={() => setShowMenu(false)} href={link}>
+                  <Link 
+                  // Remove after booking is implemented
+                  target={label === "Book Now" ? "_blank": null}
+                  onClick={() => setShowMenu(false)} href={link}>
                     {label}
                   </Link>
                 </li>

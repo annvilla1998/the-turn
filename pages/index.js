@@ -1,5 +1,7 @@
 import styles from "@/styles/Home.module.scss";
 import MainHeader from "@/components/layouts/MainHeader";
+import { ImageCarousel } from "@/components/image-carousel";
+import HourlyRates from "@/components/hourly-rates";
 
 function Home() {
   return (
@@ -7,9 +9,7 @@ function Home() {
       <section className={styles.introduction}>
         <p>
           <strong>
-            <h1 className={styles.coming_soon}>COMING SOON</h1>
-          <br />
-          <br />
+            <br />
             <h1>Welcome to The Turn!</h1>
           </strong>
           <br />
@@ -34,15 +34,17 @@ function Home() {
           entertainment. Our lounge is ideal for corporate events, casual
           hangouts, or golf lessons with expert instructors (coming soon).
           <br />
+          <br />
           Experience the future of golf in a relaxed, social atmosphere—whether
           you're an avid golfer or a newcomer, we’ve got something for everyone.
         </p>
-        <img src="/images/construction.jpeg" />
+        <img src="/images/gameplay.jpg" />
       </section>
-      <section className={styles.hourly_rates}>
-        <h2>Hourly Rates: $50/hr</h2>
-        <h2>Monday-Friday 10am - 9pm</h2>
-        <p>Special times for corporate event rentals</p>
+      <section className={styles.hourly_rates__container}>
+        <HourlyRates />
+      </section>
+      <section>
+        <ImageCarousel />
       </section>
     </div>
   );

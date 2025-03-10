@@ -20,11 +20,7 @@ export default function Book() {
 
   return (
     <div className="coming-soon">
-      <h1>COMING SOON</h1>
-      <p>
-        We are still under construction but you will be able to book with us
-        soon!
-      </p>
+      
     </div>
     // <ProtectedRoute>
     //   <div className={styles.book}>

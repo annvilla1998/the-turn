@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signOutReducer } from '../../../store/user';
 
 const menuUrls = [
-  { link: '/the-turn/book', label: 'Book Now' },
+  { link: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ1-ffmi662iw7iSin3K1u5-txijie6XwYO6m2x5Nd8A75C8qyRxOs8lxqiKIDtt1kvDM6xiDdl-', label: 'Book Now' },
   { link: '/the-turn/membership', label: 'Buy Membership' },
   { link: '/the-turn/gift-cards', label: 'Buy Gift Card' },
 ];
@@ -41,7 +41,7 @@ export default function SecondaryHeader({ children }) {
               </li>
             );
           })}
-          {session ? (
+          {/* {session ? (
             <div className={styles.book_nav__profile}>
               <p>Hi, {session?.user?.name}!</p>
               <span onClick={signOutHandler}>Sign Out</span>
@@ -50,7 +50,7 @@ export default function SecondaryHeader({ children }) {
             <Link onClick={() => setShowMenu(false)} href="/the-turn/sign-in">
               Sign In
             </Link>
-          )}
+          )} */}
         </ul>
         <IoIosMenu
           onClick={() => (showMenu ? setShowMenu(false) : setShowMenu(true))}

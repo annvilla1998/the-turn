@@ -41,6 +41,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
     "sass": "^1.79.3",
+    "swiper": "^11.2.5",
     "yup": "^1.4.0"
   },
   "devDependencies": {
