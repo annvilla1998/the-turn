@@ -7,7 +7,7 @@ export const Privacy = ({ style }) => {
 
   return (
     <>
-      <Typography align="end" onClick={() => setOpen(true)}>Privacy Policy</Typography>
+      <Typography id="privacy-policy" onClick={() => setOpen(true)}>Privacy Policy</Typography>
       <Modal
         open={open}
         onClose={() => setOpen(false)}

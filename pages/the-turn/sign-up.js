@@ -1,98 +1,99 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { fetchUser } from '../../store/user';
-import SecondaryHeader from '@/components/layouts/SecondaryHeader';
-import Button from '../../components/buttons/button';
-import Input from '../../components/inputs/input';
-import { Form, Formik } from 'formik';
-import Router from 'next/router';
-import { signIn } from 'next-auth/react';
-import * as Yup from 'yup';
-import SignInContainer from '@/components/sign-in';
-import axios from 'axios';
-import Link from 'next/link';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signUp, clearMessages } from "../../store/user";
+import SecondaryHeader from "@/components/layouts/SecondaryHeader";
+import Button from "../../components/buttons/button";
+import Input from "../../components/inputs/input";
+import { Form, Formik } from "formik";
+import { signIn } from "next-auth/react";
+import * as Yup from "yup";
+import SignInContainer from "@/components/sign-in";
+import Link from "next/link";
+import Router from "next/router";
 
 const initialVal = {
-  name: '',
-  email: '',
-  password: '',
-  conf_password: '',
-  verified: false,
-  success: '',
-  error: '',
+  name: "",
+  email: "",
+  password: "",
+  conf_password: "",
 };
-export default function SignUp() {
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(initialVal);
-  const dispatch = useDispatch();
 
-  const { name, email, password, conf_password, success, error } = user;
+export default function SignUp() {
+  const [formValues, setFormValues] = useState(initialVal);
+  const dispatch = useDispatch();
+  const {
+    isLoading,
+    resetSuccess: success,
+    error,
+  } = useSelector((state) => state.user);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setFormValues({ ...formValues, [name]: value });
   };
 
   const registerValidation = Yup.object({
     name: Yup.string()
-      .required('Please enter your name.')
-      .min(2, 'First name must be between 2 and 50 characters.')
-      .max(50, 'First name must be between 2 and 50 characters.')
-      .matches(/^[aA-zZ]/, 'Numbers and special characters are not allowed.'),
+      .required("Please enter your name.")
+      .min(2, "First name must be between 2 and 50 characters.")
+      .max(50, "First name must be between 2 and 50 characters.")
+      .matches(/^[aA-zZ]/, "Numbers and special characters are not allowed."),
     email: Yup.string()
-      .required('Please enter your email address.')
-      .email('Enter a valid email address.'),
+      .required("Please enter your email address.")
+      .email("Enter a valid email address."),
     password: Yup.string()
       .required(
-        'Enter a combination of at least six numbers, letters and special characters.'
+        "Enter a combination of at least six numbers, letters and special characters."
       )
-      .min(6, 'Password must be at least 6 characters.')
+      .min(6, "Password must be at least 6 characters.")
       .max(36, "Password can't be more than 36 characters"),
     conf_password: Yup.string()
-      .required('Confirm your password.')
-      .oneOf([Yup.ref('password')], 'Passwords must match.'),
+      .required("Confirm your password.")
+      .oneOf([Yup.ref("password")], "Passwords must match."),
   });
 
-  const signUpHandler = async () => {
+  const signUpHandler = async (values) => {
+    const { name, email, password } = values;
+    
     try {
-      setLoading(true);
-      const { data } = await axios.post('/api/auth/sign-up', {
-        name,
-        email,
-        password,
-      });
-      dispatch(fetchUser(email));
-      setUser({ ...user, error: '', success: data.message });
-      setTimeout(async () => {
-        let options = {
-          redirect: false,
-          email: email,
-          password: password,
-        };
-        const res = await signIn('credentials', options);
-        Router.push('/the-turn/book');
+      // Wait for the signUp action to complete
+      const signUpResult = await dispatch(signUp({ name, email, password }));
+      
+      // Check if the signUp was successful
+      // The exact check depends on how your Redux action returns results
+      if (signUpResult?.error) {
+        console.error("Sign-up error:", signUpResult.error);
+        return; // Don't proceed to sign-in if sign-up failed
+      }
+      
+      // Now proceed with sign-in
+      let options = {
+        redirect: false,
+        email: values.email, // Use values from parameter instead of formValues
+        password: values.password,
+      };
+      
+      const res = await signIn("credentials", options);
+
+      setTimeout(() => {
+        if (res?.error) {
+          console.error("Sign-in error:", res.error);
+        } else {
+          Router.push("/the-turn/book");
+        }
       }, 2000);
-      setLoading(false);
     } catch (error) {
-      setLoading(false);
-      setUser({ ...user, success: '', error: error.message });
+      console.error("Operation failed:", error);
     }
   };
 
   return (
-    <SignInContainer loading={loading}>
+    <SignInContainer loading={isLoading}>
       <Formik
         enableReinitialize
-        initialValues={{
-          name,
-          email,
-          password,
-          conf_password,
-        }}
+        initialValues={formValues}
         validationSchema={registerValidation}
-        onSubmit={() => {
-          signUpHandler();
-        }}
+        onSubmit={signUpHandler}
       >
         {(form) => (
           <Form>
@@ -124,7 +125,9 @@ export default function SignUp() {
               placeholder="Re-Type Password"
               onChange={handleChange}
             />
-            <Button type="submit">Sign Up</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Signing Up..." : "Sign Up"}
+            </Button>
           </Form>
         )}
       </Formik>

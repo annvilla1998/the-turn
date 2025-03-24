@@ -7,6 +7,7 @@ const router = createRouter();
 router.get(async (req, res) => {
   try {
     const { token, email, reset } = req.query;
+    console.log(token, email)
 
     const user = await prisma.user.findFirst({
       where: {
@@ -35,7 +36,8 @@ router.get(async (req, res) => {
         },
       });
 
-      res.status(200).redirect('/the-turn/verification-confirmation');
+      // Pass a verified flag to confirm this came from the verification endpoint
+      res.status(200).redirect(`/the-turn/verification-confirmation?verified=true&token=${token}&email=${email}`);
     }
   } catch (e) {
     res.status(500).json({ message: e.message });

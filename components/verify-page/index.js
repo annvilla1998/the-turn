@@ -1,38 +1,41 @@
-import React, { useState } from 'react';
-import styles from './styles.module.scss';
-import Button from '../buttons/button';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { resendVerificationEmail, clearMessages } from "../../store/user";
+import Button from "@/components/buttons/button";
+import styles from "./styles.module.scss";
 
 export default function VerifyPage({ user }) {
-  const [message, setMessage] = useState({ success: null, error: null });
+  const dispatch = useDispatch();
+  const { isLoading, verificationMessage } = useSelector((state) => state.user);
 
-  const resendVerification = async () => {
-    try {
-      const res = await fetch(`/api/send-email/${user.id}?purpose=confirmation`);
-      if (res.ok) {
-        console.log('Email sent successfully.');
-        setMessage({ success: 'Message re-sent. Please check your email.', error: null });
-      } else {
-        setMessage({ error: 'Failed to send email. Please try again or contact us for help.', success: null });
-        console.error('Failed to send email.');
-      }
-    } catch (e) {
-      console.error('Error: ', e);
-    }
+  const resendVerification = () => {
+    dispatch(resendVerificationEmail(user.email));
   };
+
+  // Clear messages when component unmounts
+  useEffect(() => {
+    return () => {
+      dispatch(clearMessages());
+    };
+  }, [dispatch]);
 
   return (
     <div className={styles.verify_page}>
       <p>An email has been sent to you. Please verify your account.</p>
       <div className={styles.verify_page__resend_button}>
         <div>
-          {message.success && (
-            <span className="success">{message.success}</span>
+          {verificationMessage?.success && (
+            <span className="success">{verificationMessage.success}</span>
           )}
         </div>
         <div>
-          {message.error && <span className="error">{message.error}</span>}
+          {verificationMessage?.error && (
+            <span className="error">{verificationMessage.error}</span>
+          )}
         </div>
-        <Button onClick={resendVerification}>Re-send Confirmation Email</Button>
+        <Button onClick={resendVerification} disabled={isLoading}>
+          {isLoading ? "Sending..." : "Re-send Confirmation Email"}
+        </Button>
       </div>
     </div>
   );

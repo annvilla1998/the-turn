@@ -113,7 +113,9 @@ export async function getServerSideProps(context) {
   if (session) {
     return {
       redirect: {
+        // TODO switch
         destination: callbackUrl || '/the-turn/book',
+        // destination: callbackUrl || '/',
       },
     };
   }
@@ -121,7 +123,9 @@ export async function getServerSideProps(context) {
   return {
     props: {
       csrfToken,
+      // TODO switch
       callbackUrl: callbackUrl || '/the-turn/book',
+      // callbackUrl: callbackUrl || '/',
     },
   };
 }

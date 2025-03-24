@@ -1,10 +1,19 @@
 import { BiRightArrowAlt } from 'react-icons/bi';
-import styles from './styles.module.scss';
+import { Button as MuiButton } from '@mui/material';
 
-export default function Button({ onClick, type, children }) {
+export default function Button({ size="medium", onClick, type, children }) {
   return (
-    <button className={styles.button} type={type} onClick={onClick}>
+    <MuiButton 
+    variant="contained" 
+    sx={{
+      width: '100%',
+      size: size,
+      margin: '8px 0',
+    }}
+    type={type} 
+    onClick={onClick}
+    >
       {children}
-    </button>
+    </MuiButton>
   );
 }

@@ -41,7 +41,7 @@ export default function SecondaryHeader({ children }) {
               </li>
             );
           })}
-          {/* {session ? (
+          {session ? (
             <div className={styles.book_nav__profile}>
               <p>Hi, {session?.user?.name}!</p>
               <span onClick={signOutHandler}>Sign Out</span>
@@ -50,7 +50,7 @@ export default function SecondaryHeader({ children }) {
             <Link onClick={() => setShowMenu(false)} href="/the-turn/sign-in">
               Sign In
             </Link>
-          )} */}
+          )}
         </ul>
         <IoIosMenu
           onClick={() => (showMenu ? setShowMenu(false) : setShowMenu(true))}

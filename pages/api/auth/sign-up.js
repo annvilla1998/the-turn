@@ -25,7 +25,7 @@ router.post(async (req, res) => {
     });
 
     if (user) {
-      return res.status(400).json({ message: 'This email already exists.' });
+      return res.status(400).json({ message: 'This account already exists. Please sign in.' });
     }
 
     if (password.length < 6) {
@@ -44,10 +44,12 @@ router.post(async (req, res) => {
         unique_str: randStr,
       },
     });
+ 
+    if(newUser) {
+      sendEmail(name, email, randStr, "confirmation");
+      res.json({ message: 'Register success!' });
+    }
 
-    sendEmail(name, email, randStr, "confirmation");
-
-    res.json({ message: 'Register success!' });
   } catch (e) {
     res.status(500).json({ message: e.message });
   }

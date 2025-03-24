@@ -17,8 +17,6 @@ export default function Forgot() {
     setEmail(value);
   };
 
-  console.log(message)
-
   const sendForgotPassword = async () => {
     try {
       const res = await fetch(

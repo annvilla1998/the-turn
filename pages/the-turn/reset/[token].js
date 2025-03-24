@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { resetPassword, clearMessages } from "../../store/user"; // Adjust the path as needed
 import SecondaryHeader from "@/components/layouts/SecondaryHeader";
 import { Form, Formik } from "formik";
 import Router from "next/router";
@@ -6,25 +8,23 @@ import Spinner from "@/components/loaders/spinner";
 import styles from "../../../styles/Reset.module.scss";
 import Input from "@/components/inputs/input";
 import Button from "@/components/buttons/button";
-import axios from 'axios';
 import * as Yup from 'yup';
 
 const initialValues = {
   password: "",
-  confPassword: "",
-  success: "",
-  error: "",
+  confPassword: ""
 };
 
 export default function Reset() {
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState(initialValues);
+  const [formValues, setFormValues] = useState(initialValues);
+  const dispatch = useDispatch();
+  const { isLoading, resetSuccess: success, error } = useSelector(state => state.user);
 
-  const { password, confPassword, success, error } = user;
+  const { password, confPassword } = formValues;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setFormValues({ ...formValues, [name]: value });
   };
 
   const passwordValidation = Yup.object({
@@ -39,36 +39,41 @@ export default function Reset() {
       .oneOf([Yup.ref("password")], "Passwords must match."),
   });
 
-  const resetPasswordHandler = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.post(`/api/auth/reset`, {
-        newPassword: password,
-      });
-      setUser({ ...user, error: "", success: data.message });
-      setTimeout(async () => {
+  const resetPasswordHandler = () => {
+    dispatch(resetPassword(password));
+  };
+
+  // Handle redirect after successful password reset
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
         Router.push("/the-turn/sign-in");
       }, 2000);
-    } catch (e) {
-      setLoading(false);
-      setUser({ ...user, success: "", error: e.message });
+      return () => clearTimeout(timer);
     }
-  };
+  }, [success]);
+
+  // Clear messages when component unmounts
+  useEffect(() => {
+    return () => {
+      dispatch(clearMessages());
+    };
+  }, [dispatch]);
 
   return (
     <div className={styles.reset}>
-      {loading && <Spinner loading={loading} />}
+      {isLoading && <Spinner loading={isLoading} />}
       <div className={styles.reset__container}>
         <p>Reset your password</p>
         <div className={styles.reset__form}>
           <Formik
             enableReinitialize
             initialValues={{
-                password,
-                confPassword,
+              password,
+              confPassword,
             }}
             validationSchema={passwordValidation}
-            onSubmit={() => resetPasswordHandler()}
+            onSubmit={resetPasswordHandler}
           >
             {(form) => (
               <Form>
@@ -86,10 +91,14 @@ export default function Reset() {
                   name="confPassword"
                   placeholder="Confirm New Password"
                 />
-                <Button type="submit">Reset Password</Button>
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? "Resetting..." : "Reset Password"}
+                </Button>
               </Form>
             )}
           </Formik>
+          <div>{success && <span className="success">{success}</span>}</div>
+          <div>{error && <span className="error">{error}</span>}</div>
         </div>
       </div>
     </div>
