@@ -33,7 +33,7 @@ export default function VerificationConfirmation() {
 
     const timer = setTimeout(() => {
       // TODO switch
-      // router.push('/the-turn/book');
+      // router.push('/the-turn/reserve');
       Router.push("/");
     }, 2000);
 

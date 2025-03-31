@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { fetchUser } from '../../store/user';
-import SecondaryHeader from '@/components/layouts/SecondaryHeader';
-import Button from '../../components/buttons/button';
-import Input from '../../components/inputs/input';
-import Link from 'next/link';
-import { Form, Formik } from 'formik';
-import Router from 'next/router';
-import { getCsrfToken, getSession, signIn } from 'next-auth/react';
-import * as Yup from 'yup';
-import SignInContainer from '@/components/sign-in';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { fetchUser } from "../../store/user";
+import SecondaryHeader from "@/components/layouts/SecondaryHeader";
+import Button from "../../components/buttons/button";
+import Input from "../../components/inputs/input";
+import Link from "next/link";
+import { Form, Formik } from "formik";
+import Router from "next/router";
+import { getCsrfToken, getSession, signIn } from "next-auth/react";
+import * as Yup from "yup";
+import SignInContainer from "@/components/sign-in";
 
 const initialVal = {
-  login_email: '',
-  login_password: '',
-  login_error: '',
+  login_email: "",
+  login_password: "",
+  login_error: "",
 };
 export default function SignIn({ callbackUrl, csrfToken }) {
   const [user, setUser] = useState(initialVal);
@@ -29,9 +29,9 @@ export default function SignIn({ callbackUrl, csrfToken }) {
 
   const loginValidation = Yup.object({
     login_email: Yup.string()
-      .required('Email address is required.')
-      .email('Please enter a valid email address.'),
-    login_password: Yup.string().required('Please enter a password.'),
+      .required("Email address is required.")
+      .email("Please enter a valid email address."),
+    login_password: Yup.string().required("Please enter a password."),
   });
 
   const signInHandler = async () => {
@@ -44,15 +44,25 @@ export default function SignIn({ callbackUrl, csrfToken }) {
 
     dispatch(fetchUser(login_email));
 
-    const res = await signIn('credentials', options);
-    setUser({ ...user, success: '', error: '' });
-    setLoading(false);
+    const res = await signIn("credentials", options);
     if (res?.error) {
       setLoading(false);
-      setUser({ ...user, login_error: res?.error });
+      setUser({ ...user, login_error: res.error });
     } else {
-      return Router.push(callbackUrl);
+      // Redirect after successful login
+      // Wait for the session to be updated
+      const session = await getSession();
+      if (session) {
+        Router.push(callbackUrl || "/the-turn/reserve");
+      } else {
+        // Handle case where session is not available
+        setUser({
+          ...user,
+          login_error: "Authentication failed. Please try again.",
+        });
+      }
     }
+    setLoading(false);
   };
 
   return (
@@ -109,23 +119,20 @@ export async function getServerSideProps(context) {
 
   const session = await getSession({ req });
   const { callbackUrl } = query;
+  let admin;
 
   if (session) {
-    return {
-      redirect: {
-        // TODO switch
-        destination: callbackUrl || '/the-turn/book',
-        // destination: callbackUrl || '/',
-      },
-    };
+    admin = session.user.role === "admin";
   }
+  // Get CSRF token for authentication
   const csrfToken = await getCsrfToken(context);
+
   return {
     props: {
       csrfToken,
-      // TODO switch
-      callbackUrl: callbackUrl || '/the-turn/book',
-      // callbackUrl: callbackUrl || '/',
+      callbackUrl: admin
+        ? "/the-turn/admin/dashboard"
+        : callbackUrl || "/the-turn/reserve",
     },
   };
 }

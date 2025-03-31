@@ -1,3 +1,5 @@
+;
+
 import styles from "@/styles/Home.module.scss";
 import MainHeader from "@/components/layouts/MainHeader";
 import { ImageCarousel } from "@/components/image-carousel";

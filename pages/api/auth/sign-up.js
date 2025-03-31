@@ -46,7 +46,7 @@ router.post(async (req, res) => {
     });
  
     if(newUser) {
-      sendEmail(name, email, randStr, "confirmation");
+      await sendEmail(newUser.id, "confirmation");
       res.json({ message: 'Register success!' });
     }
 

@@ -29,14 +29,35 @@ export const fetchUser = createAsyncThunk(
   }
 );
 
-export const updateUserSubscription = createAsyncThunk(
-  "user/updateUserSubscription",
-  async ({ userId, subscribed }, { rejectWithValue }) => {
+export const subscribeUser = createAsyncThunk(
+  "user/subscribeUser",
+  async ({ userId }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`/api/users/subscription`, {
+      const response = await fetch(`/api/users/subscribe`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, subscribed }),
+        body: JSON.stringify({ userId }),
+      });
+
+      if (!response.ok) {
+        return rejectWithValue("Failed to update subscription");
+      }
+
+      return await response.json();
+    } catch (error) {
+      return rejectWithValue("Failed to update subscription");
+    }
+  }
+);
+
+export const unsubscribeUser = createAsyncThunk(
+  "user/unsubscribeUser",
+  async ({ token }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`/api/users/unsubscribe`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
       });
 
       if (!response.ok) {
@@ -93,28 +114,27 @@ export const signUp = createAsyncThunk(
   async ({ name, email, password }, { dispatch, rejectWithValue }) => {
     try {
       const response = await fetch("/api/auth/sign-up", {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name,
           email,
           password,
-        })
+        }),
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         return rejectWithValue(errorData.message || "Failed to sign up");
       }
-      
+
       const data = await response.json();
-      console.log(data);
-      
+
       // Fetch user after successful signup
       dispatch(fetchUser(email));
-      
+
       return data.message;
     } catch (error) {
       return rejectWithValue("Something went wrong. Please try again.");
@@ -133,7 +153,6 @@ export const userSlice = createSlice({
       state.verificationMessage = { success: null, error: null };
     },
     setVerified(state) {
-      console.log(state)
       if (state.currentUser) {
         state.currentUser.verified = true;
       }
@@ -159,10 +178,16 @@ export const userSlice = createSlice({
           hasSeenSubscriptionPrompt: false,
         };
       })
-      .addCase(updateUserSubscription.fulfilled, (state, action) => {
+      .addCase(subscribeUser.fulfilled, (state) => {
         state.isLoading = false;
-        if (state.currentUser && action.payload.user) {
-          state.currentUser.subscribed = action.payload.user.subscribed;
+        if (state.currentUser) {
+          state.currentUser.subscribed = true;
+        }
+      })
+      .addCase(unsubscribeUser.fulfilled, (state) => {
+        state.isLoading = false;
+        if (state.currentUser) {
+          state.currentUser.subscribed = false;
         }
       })
       .addCase(resetPassword.fulfilled, (state, action) => {
@@ -206,7 +231,11 @@ export const userSlice = createSlice({
   },
 });
 
-export const { clearMessages, signOutReducer, setVerified, markSubscriptionPromptAsSeen } =
-  userSlice.actions;
+export const {
+  clearMessages,
+  signOutReducer,
+  setVerified,
+  markSubscriptionPromptAsSeen,
+} = userSlice.actions;
 
 export default userSlice.reducer;

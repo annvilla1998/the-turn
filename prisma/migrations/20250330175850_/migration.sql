@@ -1,13 +1,14 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" VARCHAR(100) NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "password" TEXT NOT NULL,
-    "owner" BOOLEAN NOT NULL DEFAULT false,
+    "role" TEXT NOT NULL DEFAULT 'user',
     "member" BOOLEAN NOT NULL DEFAULT false,
     "verified" BOOLEAN NOT NULL DEFAULT false,
     "subscribed" BOOLEAN NOT NULL DEFAULT false,
+    "unsubscribe_token" TEXT,
     "unique_str" VARCHAR(25) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -17,8 +18,8 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Reservation" (
-    "id" SERIAL NOT NULL,
-    "user_id" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "service_time" DOUBLE PRECISION NOT NULL,
     "time" TEXT NOT NULL,
@@ -33,6 +34,9 @@ CREATE TABLE "Reservation" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_unsubscribe_token_key" ON "User"("unsubscribe_token");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_unique_str_key" ON "User"("unique_str");

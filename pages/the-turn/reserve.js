@@ -12,7 +12,7 @@ const initial = {
   date: new Date(),
   time: "",
 };
-export default function Book() {
+export default function Reserve() {
   const [value, onChange] = useState(new Date());
   const { date, time } = initial;
   const now = new Date();
@@ -52,6 +52,6 @@ export default function Book() {
   );
 }
 
-Book.getLayout = function getLayout(page) {
+Reserve.getLayout = function getLayout(page) {
   return <SecondaryHeader>{page}</SecondaryHeader>;
 };

@@ -7,20 +7,20 @@ const users = [
     email: 'theturnvv@gmail.com',
     password: process.env.DEFAULT_PW,
     unique_str: randString(),
-    owner: true,
+    role: "admin",
   },
   {
+    id: "7f0c3a11-aec0-4797-aad5-c3d79c1619e7",
     name: 'Test',
     email: 'villalobos1998@gmail.com',
     password: 'test',
     unique_str: randString(),
-    owner: true,
   },
 ];
 
 const reservations = [
   {
-    user_id: 1,
+    user_id: "7f0c3a11-aec0-4797-aad5-c3d79c1619e7",
     date: new Date(2024, 11, 1),
     service_time: 1,
     time: '10:00 am',

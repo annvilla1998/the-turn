@@ -79,7 +79,7 @@ export default function SignUp() {
         if (res?.error) {
           console.error("Sign-in error:", res.error);
         } else {
-          Router.push("/the-turn/book");
+          Router.push("/the-turn/reserve");
         }
       }, 2000);
     } catch (error) {

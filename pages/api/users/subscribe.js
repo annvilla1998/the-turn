@@ -1,4 +1,6 @@
 import prisma from "@/lib/prisma";
+import crypto from "crypto";
+import { sendEmail } from "@/utils/sendEmail";
 
 export default async function handler(req, res) {
   if (req.method !== "PUT" && req.method !== "PATCH") {
@@ -6,27 +8,41 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { userId, subscribed } = req.body;
+    const { userId } = req.body;
 
     if (!userId) {
       return res.status(400).json({ message: "Missing userId" });
     }
-
     const updatedUser = await prisma.user.update({
       where: {
         id: userId,
       },
       data: {
-        subscribed,
+        subscribed: true,
+        unsubscribe_token: crypto.randomBytes(32).toString("hex"),
       },
     });
+    
+    if (updatedUser) {
+      try {
+        await sendEmail(userId, "subscribeConfirmation");
+        res
+        .status(200)
+        .json({
+          message:
+          "A message has been sent to your email with instructions to reset your password.",
+        });
+      } catch (e) {
+        res.status(500).json({ message: "Failed to send email." });
+      }
+    }
 
     return res.status(200).json({
-      message: "Subscription updated successfully",
+      message: "User successfully subscribed!",
       user: updatedUser,
     });
   } catch (error) {
-    console.error("Error updating subscription:", error);
+    console.error("Error subscribing:", error);
 
     if (error.code === "P2025") {
       return res.status(404).json({ message: "User not found" });
