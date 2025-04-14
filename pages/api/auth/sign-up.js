@@ -50,9 +50,10 @@ router.post(async (req, res) => {
 
     try {
       await sendEmail({ user: newUser, purpose: "confirmation" });
-      return res
-        .status(200)
-        .json({ message: "Register success! Confirmation email sent." });
+      return res.status(200).json({
+        message: "Register success! Confirmation email sent.",
+        newUser
+      });
     } catch (emailError) {
       logError("Email send error:", emailError);
       return res.status(200).json({

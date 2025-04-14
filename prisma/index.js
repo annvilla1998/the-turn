@@ -1,6 +1,6 @@
 import { randString } from "../utils/randString.js";
 import prisma from "../lib/prisma.js";
-import { logError } from "..//utils/logger.js";
+import { logError } from "../utils/logger.js";
 
 const users = [
   {

@@ -5,7 +5,7 @@ const initialState = {
   isLoading: false,
   error: null,
   resetSuccess: null,
-  verificationMessage: { success: null, error: null },
+  verificationMessage: { success: null, error: null }
 };
 
 export const fetchUser = createAsyncThunk(
@@ -36,7 +36,7 @@ export const subscribeUser = createAsyncThunk(
       const response = await fetch(`/api/users/subscribe`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
+        body: JSON.stringify({ userId })
       });
 
       if (!response.ok) {
@@ -57,7 +57,7 @@ export const unsubscribeUser = createAsyncThunk(
       const response = await fetch(`/api/users/unsubscribe`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ token })
       });
 
       if (!response.ok) {
@@ -78,9 +78,9 @@ export const resetPassword = createAsyncThunk(
       const res = await fetch(`/api/auth/reset`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({ newPassword }),
+        body: JSON.stringify({ newPassword })
       });
 
       const data = await res.json();
@@ -121,18 +121,18 @@ export const resendVerificationEmail = createAsyncThunk(
 
 export const signUp = createAsyncThunk(
   "user/signUp",
-  async ({ name, email, password }, { dispatch, rejectWithValue }) => {
+  async ({ name, email, password }, { rejectWithValue }) => {
     try {
       const response = await fetch("/api/auth/sign-up", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           name,
           email,
-          password,
-        }),
+          password
+        })
       });
 
       if (!response.ok) {
@@ -142,10 +142,7 @@ export const signUp = createAsyncThunk(
 
       const data = await response.json();
 
-      // Fetch user after successful signup
-      dispatch(fetchUser(email));
-
-      return data.message;
+      return data;
     } catch (error) {
       return rejectWithValue(
         error.message || "Something went wrong. Please try again."
@@ -178,7 +175,7 @@ export const userSlice = createSlice({
       state.error = null;
       state.resetSuccess = null;
       state.verificationMessage = { success: null, error: null };
-    },
+    }
   },
   extraReducers: (builder) => {
     // All addCase calls must come before addMatcher calls
@@ -187,7 +184,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.currentUser = {
           ...action.payload,
-          hasSeenSubscriptionPrompt: false,
+          hasSeenSubscriptionPrompt: false
         };
       })
       .addCase(subscribeUser.fulfilled, (state) => {
@@ -212,20 +209,20 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.verificationMessage = {
           success: action.payload,
-          error: null,
+          error: null
         };
       })
       .addCase(resendVerificationEmail.rejected, (state, action) => {
         state.isLoading = false;
         state.verificationMessage = {
           success: null,
-          error: action.payload,
+          error: action.payload
         };
       })
       .addCase(signUp.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.resetSuccess = action.payload;
+        state.currentUser = action.payload.newUser;
       })
       // After all addCase calls, we can use addMatcher
       .addMatcher(
@@ -242,14 +239,14 @@ export const userSlice = createSlice({
           state.error = action.payload || "An error occurred";
         }
       );
-  },
+  }
 });
 
 export const {
   clearMessages,
   signOutReducer,
   setVerified,
-  markSubscriptionPromptAsSeen,
+  markSubscriptionPromptAsSeen
 } = userSlice.actions;
 
 export default userSlice.reducer;

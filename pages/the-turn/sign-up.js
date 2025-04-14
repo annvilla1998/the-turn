@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signUp } from "../../store/user";
+import { signUp, clearMessages } from "../../store/user";
 import SecondaryHeader from "@/components/layouts/SecondaryHeader";
 import Button from "../../components/buttons/button";
 import Input from "../../components/inputs/input";
@@ -84,6 +84,12 @@ export default function SignUp() {
       logError("Operation failed:", error);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearMessages());
+    };
+  }, [dispatch]);
 
   return (
     <SignInContainer loading={isLoading}>

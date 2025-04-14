@@ -54,9 +54,9 @@ export default function MainHeader({ children }) {
     }
   };
 
-  const signOutHandler = () => {
+  const signOutHandler = async () => {
     dispatch(signOutReducer());
-    signOut();
+    await signOut({ redirect: false });
   };
 
   return (
@@ -102,7 +102,7 @@ export default function MainHeader({ children }) {
                     e.preventDefault();
                     signOutHandler();
                   }}
-                  href="#"
+                  href="/"
                 >
                   Log Out
                 </Link>

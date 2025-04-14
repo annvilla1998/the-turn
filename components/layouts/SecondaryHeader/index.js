@@ -70,9 +70,9 @@ export default function SecondaryHeader({ children }) {
     setAnchorEl(null);
   };
 
-  const signOutHandler = () => {
+  const signOutHandler = async () => {
     dispatch(signOutReducer());
-    signOut();
+    await signOut({ redirect: false });
 
     handleProfileMenuClose();
   };

@@ -9,7 +9,7 @@ import userReducer from "./user";
 
 const reducers = combineReducers({
   reservation: reservationReducer,
-  user: userReducer,
+  user: userReducer
 });
 
 const persistConfig = {
@@ -17,7 +17,7 @@ const persistConfig = {
   key: "root",
   storage,
   whitelist: ["user"],
-  timeout: 1000,
+  timeout: 1000
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
@@ -26,10 +26,17 @@ const persistedReducer = persistReducer(persistConfig, reducers);
 const store = configureStore({
   reducer: persistedReducer,
   devTools: process.env.NODE_ENV !== "production",
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }).concat(thunk, logger),
+  middleware: (getDefaultMiddleware) => {
+    const middlewares = getDefaultMiddleware({
+      serializableCheck: false
+    }).concat(thunk);
+
+    if (process.env.NODE_ENV !== "production") {
+      middlewares.push(logger);
+    }
+
+    return middlewares;
+  }
 });
 
 // Create the persistor
