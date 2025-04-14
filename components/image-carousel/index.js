@@ -18,19 +18,19 @@ export const ImageCarousel = () => {
         styles={{
           ".swiper": {
             width: "100%",
-            height: "500px",
+            height: "500px"
           },
           ".swiper-slide": {
             display: "flex",
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: "center"
           },
           ".swiper-slide img": {
             display: "block",
             width: "100%",
             height: "100%",
-            objectFit: "cover",
-          },
+            objectFit: "cover"
+          }
         }}
       />
       <Swiper
@@ -38,10 +38,10 @@ export const ImageCarousel = () => {
         centeredSlides={true}
         autoplay={{
           delay: 3000,
-          disableOnInteraction: false,
+          disableOnInteraction: false
         }}
         pagination={{
-          clickable: true,
+          clickable: true
         }}
         loop={true}
         modules={[Autoplay, Pagination]}

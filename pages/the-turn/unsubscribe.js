@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SecondaryHeader from "@/components/layouts/SecondaryHeader";
 import { useSearchParams } from "next/navigation";
 import { clearMessages, unsubscribeUser } from "@/store/user";
-import { Box, Typography, Container } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 
 export default function Unsubscribe() {
@@ -42,7 +42,7 @@ export default function Unsubscribe() {
         justifyContent: "center",
         minHeight: "90vh",
         margin: 0,
-        fontWeight: 700,
+        fontWeight: 700
       }}
     >
       <Typography fontWeight="bold">{status}</Typography>

@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { useSession, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -17,9 +18,10 @@ import {
   TableRow,
   TablePagination,
   Box,
-  CircularProgress,
+  CircularProgress
 } from "@mui/material";
-import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import { Delete as DeleteIcon } from "@mui/icons-material";
+import { logError } from "@/utils/logger";
 
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
@@ -50,7 +52,7 @@ export default function AdminDashboard() {
       const data = await response.json();
       setUsers(data.users);
     } catch (error) {
-      console.error("Failed to fetch users:", error);
+      logError("Failed to fetch users:", error);
       setError("Failed to fetch users");
     } finally {
       setLoading(false);
@@ -70,12 +72,12 @@ export default function AdminDashboard() {
     try {
       setError("");
       const response = await fetch(`/api/admin/user/delete?userId=${id}`, {
-        method: "DELETE",
+        method: "DELETE"
       });
       if (!response.ok) throw new Error("Failed to delete user");
       setUsers((prev) => prev.filter((user) => user.id !== id));
     } catch (error) {
-      console.error("Failed to delete user:", error);
+      logError("Failed to delete user:", error);
       setError("Failed to fetch users.");
     }
   };
@@ -115,6 +117,7 @@ export default function AdminDashboard() {
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Role</TableCell>
+                <TableCell>Subscribed</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -132,6 +135,7 @@ export default function AdminDashboard() {
                         size="small"
                       />
                     </TableCell>
+                    <TableCell>{user.subscribed ? "subscribed" : ""}</TableCell>
                     <TableCell align="right">
                       <IconButton
                         size="small"
@@ -176,15 +180,15 @@ export default function AdminDashboard() {
 }
 
 export async function getServerSideProps(context) {
-  const { req, query } = context;
+  const { req } = context;
   const session = await getSession({ req });
 
   if (!session) {
     return {
       redirect: {
         destination: "/the-turn/sign-in",
-        permanent: false,
-      },
+        permanent: false
+      }
     };
   }
 
@@ -192,12 +196,12 @@ export async function getServerSideProps(context) {
     return {
       redirect: {
         destination: "/the-turn/unauthorized",
-        permanent: false,
-      },
+        permanent: false
+      }
     };
   }
 
   return {
-    props: {},
+    props: {}
   };
 }

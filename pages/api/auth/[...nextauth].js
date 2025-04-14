@@ -13,25 +13,26 @@ export const authOptions = {
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
         // Add logic to verify credentials here
         if (!credentials) return null;
         const { email, password } = credentials;
+
         // Fetch user and password hash from database
         const user = await prisma.user.findUnique({
           where: {
-            email: email,
-          },
+            email: email
+          }
         });
         if (user) {
           return SignInUser({ password, user });
         } else {
           throw new Error("Invalid email or password. Please try again.");
         }
-      },
-    }),
+      }
+    })
   ],
   callbacks: {
     async jwt({ token, user }) {
@@ -43,27 +44,29 @@ export const authOptions = {
     async session({ session, token }) {
       session.user.role = token.role;
       return session;
-    },
+    }
   },
   pages: {
     "sign-in": "/sign-in",
-    "unauthorized": "/the-turn/unauthorized",
+    unauthorized: "/the-turn/unauthorized"
   },
   session: {
     strategy: "jwt",
-    maxAge: 1 * 24 * 60 * 60,
+    maxAge: 1 * 24 * 60 * 60
   },
-  secret: process.env.JWT_SECRET,
+  secret: process.env.JWT_SECRET
 };
 
 const SignInUser = async ({ password, user }) => {
   if (!user.password) {
     throw new Error("Please enter your password");
   }
+
   const testPassword = await bcrypt.compare(password, user.password);
   if (!testPassword) {
     throw new Error("Invalid email or password");
   }
+
   return {
     id: user.id,
     email: user.email,
@@ -73,7 +76,7 @@ const SignInUser = async ({ password, user }) => {
     verified: user.verified,
     subscribed: user.subscribed,
     unsubscribe_token: user.unsubscribe_token,
-    unique_str: user.unique_str,
+    unique_str: user.unique_str
   };
 };
 

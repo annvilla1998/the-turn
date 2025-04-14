@@ -1,67 +1,114 @@
-import { activateEmailTemplate } from "@/emails/activateEmailTemplate";
-import { resetPasswordEmailTemplate } from "@/emails/reset-password-email-template";
-import prisma from "@/lib/prisma";
-import { subscribeConfirmation } from "@/emails/subscribeConfirmation";
+import EmailVerificationTemplate from "@/components/emails/EmailVerificationTemplate";
+import ResetPasswordEmailTemplate from "@/components/emails/ResetPasswordEmailTemplate";
+import SubscribeConfirmation from "@/components/emails/SubscribeConfirmation";
+import NewsletterTemplate from "@/components/emails/NewsletterTemplate";
+import { Resend } from "resend";
+import { logError } from "./logger";
 
-const nodemailer = require("nodemailer");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const sendEmail = async (userId, purpose) => {
-  const Transport = nodemailer.createTransport({
-    service: "Gmail",
-    host: "smtp.gmail.com",
-    secure: true,
-    auth: {
-      user: "1998sieber@gmail.com",
-      pass: process.env.APP_PW,
-    },
-  });
+const defaultArgs = {
+  from: "The Turn <theturn@theturnvv.com>"
+};
 
-  // Find the user
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-  });
+export const sendEmail = async ({
+  user,
+  purpose,
+  users,
+  subjectMessage,
+  caption,
+  imageUrl
+}) => {
+  if (purpose === "newsletter") {
+    let emailArgs = [];
+    for (const user of users) {
+      emailArgs.push({
+        ...defaultArgs,
+        to: [user.email],
+        subject: subjectMessage,
+        react: NewsletterTemplate({
+          unsubscribeUrl: `${process.env.NEXT_PUBLIC_API_URL}/the-turn/unsubscribe?token=${user.unsubscribe_token}`,
+          caption,
+          imageUrl
+        })
+      });
+    }
 
-  let mailOptions;
-  let html;
+    await sendNewsletterEmail(emailArgs);
+
+    return;
+  }
+
   let verifyUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify?token=${encodeURIComponent(user.unique_str)}&email=${encodeURIComponent(user.email)}`;
-  let sender = "Anabel";
-
-  const unsubscribeUrl = `${process.env.NEXT_PUBLIC_API_URL}/the-turn/unsubscribe?token=${user.unsubscribe_token}`;
 
   if (purpose === "confirmation") {
-    html = activateEmailTemplate(user.name, verifyUrl, unsubscribeUrl);
-  } else if (purpose === "password-reset") {
-    html = resetPasswordEmailTemplate(
-      user.name,
-      verifyUrl + "&reset=true",
-      unsubscribeUrl
-    );
-  } else if (purpose === "subscribeConfirmation") {
-    html = subscribeConfirmation(unsubscribeUrl);
-  }
-
-  let subject;
-
-  if(purpose === "confirmation") {
-    subject = "Verify your email";
-  } else if(purpose === "subscribeConfirmation") {
-    subject = "Subscription Confirmation";
-  } else if(purpose === "password-reset") {
-    subject = "Reset Password";
-  }
-
-  mailOptions = {
-    from: sender,
-    to: user.email,
-    subject: subject,
-    html: html,
-  };
-
-  Transport.sendMail(mailOptions, (err, res) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("Message sent");
+    if (!user) {
+      throw new Error("User not found while sending confirmation.");
     }
-  });
+
+    await sendSingleEmail({
+      ...defaultArgs,
+      to: [user.email],
+      subject: "Verify your email",
+      react: EmailVerificationTemplate({
+        userName: user.name,
+        url: verifyUrl
+      })
+    });
+
+    return;
+  }
+
+  if (purpose === "password-reset") {
+    await sendSingleEmail({
+      ...defaultArgs,
+      to: [user.email],
+      subject: "Reset Password",
+      react: ResetPasswordEmailTemplate({
+        userName: user.name,
+        url: verifyUrl + "&reset=true"
+      })
+    });
+
+    return;
+  }
+
+  if (purpose === "subscribe-confirmation") {
+    await sendSingleEmail({
+      ...defaultArgs,
+      to: [user.email],
+      subject: "Subscription Confirmation",
+      react: SubscribeConfirmation({
+        unsubscribeUrl: `${process.env.NEXT_PUBLIC_API_URL}/the-turn/unsubscribe?token=${user.unsubscribe_token}`
+      })
+    });
+
+    return;
+  }
+};
+
+const sendNewsletterEmail = async (emailArgs) => {
+  const { data, error } = await resend.batch.send(emailArgs);
+
+  if (error) {
+    logError("Failed to send newsletter emails.", error);
+    throw new Error("Failed to send newsletter emails.");
+  }
+
+  if (data) {
+    return data;
+  }
+};
+
+const sendSingleEmail = async (emailArgs) => {
+  const { data, error } = await resend.emails.send(emailArgs);
+
+  if (error) {
+    logError("Failed to send email:", error);
+    throw new Error("Failed to send email.");
+  }
+
+  if (data) {
+    return data;
+  }
 };

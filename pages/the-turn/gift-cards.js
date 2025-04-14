@@ -1,6 +1,5 @@
 import React from "react";
 import SecondaryHeader from "@/components/layouts/SecondaryHeader";
-import styles from "@/styles/GiftCards.module.scss";
 import ProtectedRoute from "@/components/protected-route";
 
 export default function GiftCards() {

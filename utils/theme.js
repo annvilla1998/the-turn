@@ -1,4 +1,5 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
+import { customColors } from "./customColors";
 
 const theme = createTheme({
   breakpoints: {
@@ -11,17 +12,34 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#0B2569', // customize your primary color
+      main: customColors.logoBlue,
     },
     secondary: {
-      main: '#9BF128', // customize your secondary color
+      main: customColors.logoDarkGreen,
     },
-    // Add more color overrides as needed
+    background: {
+      black: customColors.black,
+      default: "#fff",
+      paper: "#fff",
+    },
+    error: {
+      main: customColors.errorRed,
+    },
+    text: {
+      primary: customColors.black,
+    },
+    custom: {
+      navColor: customColors.blackOpaque,
+      navShadow: customColors.navShadow,
+      logoLightGreen: customColors.logoLightGreen,
+      logoPurple: customColors.logoPurple,
+    },
   },
   typography: {
-    fontFamily: '"-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+    fontFamily:
+      '"-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
     h1: {
-      fontSize: '2.5rem',
+      fontSize: "2.5rem",
       fontWeight: 500,
     },
   },

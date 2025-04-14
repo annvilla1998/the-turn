@@ -1,3 +1,4 @@
+import React from "react";
 import { useDispatch } from "react-redux";
 import { Modal, Box, Typography, Button } from "@mui/material";
 import { subscribeUser } from "../../../store/user";
@@ -25,7 +26,7 @@ const SubscriptionModal = ({ open, onClose, currentUser }) => {
           left: "50%",
           transform: "translate(-50%, -50%)",
           width: 300,
-          bgcolor: "background.paper",
+          backgroundColor: theme.palette.background.default,
           boxShadow: 24,
           p: 4,
           borderRadius: 2,
@@ -36,8 +37,8 @@ const SubscriptionModal = ({ open, onClose, currentUser }) => {
           textAlign: "center",
           [theme.breakpoints.up("desktop")]: {
             width: 400,
-            left: "50%",
-          },
+            left: "50%"
+          }
         }}
       >
         <Typography
@@ -53,7 +54,7 @@ const SubscriptionModal = ({ open, onClose, currentUser }) => {
         </Typography>
         <Typography variant="caption">
           By subscribing you'll receive newsletters featuring exclusive
-          promotions, updates, and events. The Turn will use your email address
+          newsletters, updates, and events. The Turn will use your email address
           only for sending these communications. You can unsubscribe at any time
           using the link in any email. For more information on how we handle
           your data, please see our Privacy Policy.
@@ -63,7 +64,7 @@ const SubscriptionModal = ({ open, onClose, currentUser }) => {
             display: "flex",
             justifyContent: "flex-end",
             gap: 2,
-            marginTop: 5,
+            marginTop: 5
           }}
         >
           <Button onClick={onClose} color="inherit">

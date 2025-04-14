@@ -1,40 +1,26 @@
-$nav-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-$black: #090f0a;
-$black-opaque: #090f0aee;
-$grey: #202020;
-$logo-light-green: #C4FD3C;
-$logo-dark-green: #9BF128;
-$logo-purple: #0B1143;
-$logo-blue: #0B2569;
-$error-red: #ec3f3f;
+// $black: #090f0a;
+// $black-opaque: #090f0aee;
+// $grey: #202020;
+// $logo-light-green: #C4FD3C;
+// $logo-dark-green: #9BF128;
+// $logo-purple: #0B1143;
+// $logo-blue: #0B2569;
+// $error-red: #ec3f3f;
 
-.center_flex {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+// .center_flex {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
 
-.error {
-  color: $error-red;
-  font-weight: 700;
-  margin: 5px 0;
-  display: block;
-}
+// .error {
+//   // color: $error-red;
+//   font-weight: 700;
+//   margin: 5px 0;
+//   display: block;
+// }
 
-.success {
-  color: #6e6e6e;
-  font-weight: 700;
-}
-
-// TEMPORARY COMING SOON
-.coming-soon {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  height: 90vh;
-  margin: 20px;
-  text-align: center;
-  font-weight: 700;
-}
+// .success {
+//   color: #6e6e6e;
+//   font-weight: 700;
+// }

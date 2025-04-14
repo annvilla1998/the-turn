@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 const reservation = createSlice({
-  name: 'reservation',
+  name: "reservation",
   initialState: [],
   reducers: {},
 });

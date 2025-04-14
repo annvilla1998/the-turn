@@ -1,7 +1,7 @@
 .footer {
   color: #ffff;
   padding: 3rem 4rem 3rem 4rem;
-  background-color: $black;
+  // background-color: $black;
 
   &__content {
     display: flex;
@@ -10,7 +10,7 @@
 
   &__privacy {
     ul {
-        list-style: square;
+      list-style: square;
     }
   }
 
@@ -52,15 +52,15 @@
 }
 
 @media (max-width: 900px) {
-    .footer {
-        &__content {
-            flex-direction: column;
-        }
-
-        &__terms {
-            display: flex;
-            align-items: flex-start;
-            margin-top: 15px;
-          }
+  .footer {
+    &__content {
+      flex-direction: column;
     }
+
+    &__terms {
+      display: flex;
+      align-items: flex-start;
+      margin-top: 15px;
+    }
+  }
 }

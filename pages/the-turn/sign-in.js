@@ -10,11 +10,12 @@ import Router from "next/router";
 import { getCsrfToken, getSession, signIn } from "next-auth/react";
 import * as Yup from "yup";
 import SignInContainer from "@/components/sign-in";
+import { Alert } from "@mui/material";
 
 const initialVal = {
   login_email: "",
   login_password: "",
-  login_error: "",
+  login_error: ""
 };
 export default function SignIn({ callbackUrl, csrfToken }) {
   const [user, setUser] = useState(initialVal);
@@ -31,7 +32,7 @@ export default function SignIn({ callbackUrl, csrfToken }) {
     login_email: Yup.string()
       .required("Email address is required.")
       .email("Please enter a valid email address."),
-    login_password: Yup.string().required("Please enter a password."),
+    login_password: Yup.string().required("Please enter a password.")
   });
 
   const signInHandler = async () => {
@@ -39,29 +40,31 @@ export default function SignIn({ callbackUrl, csrfToken }) {
     let options = {
       redirect: false,
       email: login_email,
-      password: login_password,
+      password: login_password
     };
-
-    dispatch(fetchUser(login_email));
 
     const res = await signIn("credentials", options);
     if (res?.error) {
       setLoading(false);
       setUser({ ...user, login_error: res.error });
-    } else {
-      // Redirect after successful login
-      // Wait for the session to be updated
-      const session = await getSession();
-      if (session) {
-        Router.push(callbackUrl || "/the-turn/reserve");
-      } else {
-        // Handle case where session is not available
-        setUser({
-          ...user,
-          login_error: "Authentication failed. Please try again.",
-        });
-      }
+      return;
     }
+
+    await dispatch(fetchUser(login_email));
+
+    // Redirect after successful login
+    // Wait for the session to be updated
+    const session = await getSession();
+    if (session) {
+      Router.push(callbackUrl || "/the-turn/reserve");
+    } else {
+      // Handle case where session is not available
+      setUser({
+        ...user,
+        login_error: "Authentication failed. Please try again."
+      });
+    }
+
     setLoading(false);
   };
 
@@ -71,14 +74,14 @@ export default function SignIn({ callbackUrl, csrfToken }) {
         enableReinitialize
         initialValues={{
           login_email,
-          login_password,
+          login_password
         }}
         validationSchema={loginValidation}
         onSubmit={() => {
           signInHandler();
         }}
       >
-        {(form) => (
+        {() => (
           <Form method="post" action="/api/auth/signin/email">
             <input type="hidden" name="csrfToken" defaultValue={csrfToken} />
             <Input
@@ -96,8 +99,12 @@ export default function SignIn({ callbackUrl, csrfToken }) {
               onChange={handleChange}
             />
             <Button type="submit">Sign In</Button>
-            {login_error && <span className="error">{login_error}</span>}
-            <div>
+            {login_error && (
+              <Alert mb={10} severity="error">
+                {login_error}
+              </Alert>
+            )}
+            <div style={{ marginTop: 10 }}>
               <Link href="/the-turn/forgot">Forgot password?</Link>
             </div>
             <div>
@@ -132,7 +139,7 @@ export async function getServerSideProps(context) {
       csrfToken,
       callbackUrl: admin
         ? "/the-turn/admin/dashboard"
-        : callbackUrl || "/the-turn/reserve",
-    },
+        : callbackUrl || "/the-turn/reserve"
+    }
   };
 }

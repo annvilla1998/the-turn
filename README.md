@@ -9,10 +9,9 @@ npm run dev
 ```
 
 Migrating the DB
+
 ```bash
 npx prisma migrate dev --name first-migration
 ```
 
-
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-

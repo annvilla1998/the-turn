@@ -45,7 +45,7 @@ export const subscribeUser = createAsyncThunk(
 
       return await response.json();
     } catch (error) {
-      return rejectWithValue("Failed to update subscription");
+      return rejectWithValue(error.message || "Failed to update subscription");
     }
   }
 );
@@ -66,7 +66,7 @@ export const unsubscribeUser = createAsyncThunk(
 
       return await response.json();
     } catch (error) {
-      return rejectWithValue("Failed to update subscription");
+      return rejectWithValue(error.message || "Failed to update subscription");
     }
   }
 );
@@ -75,9 +75,19 @@ export const resetPassword = createAsyncThunk(
   "user/resetPassword",
   async (newPassword, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`/api/auth/reset`, {
-        newPassword,
+      const res = await fetch(`/api/auth/reset`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ newPassword }),
       });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        return rejectWithValue(data.message || "Failed to reset password.");
+      }
 
       return data.message;
     } catch (error) {
@@ -137,7 +147,9 @@ export const signUp = createAsyncThunk(
 
       return data.message;
     } catch (error) {
-      return rejectWithValue("Something went wrong. Please try again.");
+      return rejectWithValue(
+        error.message || "Something went wrong. Please try again."
+      );
     }
   }
 );
@@ -193,6 +205,8 @@ export const userSlice = createSlice({
       .addCase(resetPassword.fulfilled, (state, action) => {
         state.isLoading = false;
         state.resetSuccess = action.payload;
+        state.currentUser = null;
+        state.error = null;
       })
       .addCase(resendVerificationEmail.fulfilled, (state, action) => {
         state.isLoading = false;

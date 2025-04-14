@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { logError } from "@/utils/logger";
 // import { NextResponse } from "next/server";
 
 export default async function handler(req, res) {
@@ -14,7 +15,7 @@ export default async function handler(req, res) {
 
     // Find the user by token
     const user = await prisma.user.findUnique({
-      where: { unsubscribe_token: token },
+      where: { unsubscribe_token: token }
     });
 
     if (!user) {
@@ -24,15 +25,15 @@ export default async function handler(req, res) {
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
       data: {
-        subscribed: false,
-      },
+        subscribed: false
+      }
     });
 
     return res.status(200).json({
       message: "You have been unsubscribed.",
-      user: updatedUser,
+      user: updatedUser
     });
   } catch (error) {
-    console.error("Error updating subscription:", error);
+    logError("Error updating subscription:", error);
   }
 }

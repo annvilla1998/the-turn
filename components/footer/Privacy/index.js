@@ -1,20 +1,29 @@
 import React, { useState } from "react";
-import { Modal, Typography, Box } from "@mui/material";
+import { Modal, Typography, Box, useTheme } from "@mui/material";
 import styles from "../styles.module.scss";
 
 export const Privacy = ({ style }) => {
   const [open, setOpen] = useState(false);
+  const theme = useTheme();
 
   return (
     <>
-      <Typography id="privacy-policy" onClick={() => setOpen(true)}>Privacy Policy</Typography>
+      <Typography id="privacy-policy" onClick={() => setOpen(true)}>
+        Privacy Policy
+      </Typography>
       <Modal
         open={open}
         onClose={() => setOpen(false)}
         aria-labelledby="Privacy Policy"
         aria-describedby="Privacy Policy for The Turn"
       >
-        <Box className={styles.footer__privacy} sx={style}>
+        <Box
+          className={styles.footer__privacy}
+          sx={{
+            ...style,
+            backgroundColor: theme.palette.background.default
+          }}
+        >
           <Typography id="privacy-policy-title" variant="h5" component="h2">
             Privacy Policy for The Turn Golf Simulator & Lounge
           </Typography>
@@ -63,7 +72,7 @@ export const Privacy = ({ style }) => {
                   </li>
                   <li>
                     To communicate with you about your account, upcoming
-                    reservations, promotions, and events.
+                    reservations, newsletters, and events.
                   </li>
                   <li>To improve our services and customer experience.</li>
                   <li>

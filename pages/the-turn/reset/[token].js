@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { resetPassword, clearMessages } from "../../store/user"; // Adjust the path as needed
+import { resetPassword, clearMessages } from "../../../store/user"; // Adjust the path as needed
 import SecondaryHeader from "@/components/layouts/SecondaryHeader";
 import { Form, Formik } from "formik";
 import Router from "next/router";
@@ -8,7 +8,8 @@ import Spinner from "@/components/loaders/spinner";
 import styles from "../../../styles/Reset.module.scss";
 import Input from "@/components/inputs/input";
 import Button from "@/components/buttons/button";
-import * as Yup from 'yup';
+import { Alert } from "@mui/material";
+import * as Yup from "yup";
 
 const initialValues = {
   password: "",
@@ -18,7 +19,11 @@ const initialValues = {
 export default function Reset() {
   const [formValues, setFormValues] = useState(initialValues);
   const dispatch = useDispatch();
-  const { isLoading, resetSuccess: success, error } = useSelector(state => state.user);
+  const {
+    isLoading,
+    resetSuccess: success,
+    error
+  } = useSelector((state) => state.user);
 
   const { password, confPassword } = formValues;
 
@@ -36,7 +41,7 @@ export default function Reset() {
       .max(36, "Password can't be more than 36 characters"),
     confPassword: Yup.string()
       .required("Confirm your password.")
-      .oneOf([Yup.ref("password")], "Passwords must match."),
+      .oneOf([Yup.ref("password")], "Passwords must match.")
   });
 
   const resetPasswordHandler = () => {
@@ -55,10 +60,10 @@ export default function Reset() {
 
   // Clear messages when component unmounts
   useEffect(() => {
-    return () => {
+    if (password || confPassword) {
       dispatch(clearMessages());
-    };
-  }, [dispatch]);
+    }
+  }, [password, confPassword]);
 
   return (
     <div className={styles.reset}>
@@ -70,12 +75,12 @@ export default function Reset() {
             enableReinitialize
             initialValues={{
               password,
-              confPassword,
+              confPassword
             }}
             validationSchema={passwordValidation}
             onSubmit={resetPasswordHandler}
           >
-            {(form) => (
+            {() => (
               <Form>
                 <Input
                   type="password"
@@ -97,8 +102,16 @@ export default function Reset() {
               </Form>
             )}
           </Formik>
-          <div>{success && <span className="success">{success}</span>}</div>
-          <div>{error && <span className="error">{error}</span>}</div>
+          {success && (
+            <Alert severity="success" sx={{ mt: 2 }}>
+              {success}
+            </Alert>
+          )}
+          {error && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {error}
+            </Alert>
+          )}
         </div>
       </div>
     </div>

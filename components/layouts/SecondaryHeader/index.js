@@ -20,11 +20,12 @@ import {
   ListItemText,
   Divider,
   Avatar,
+  useTheme
 } from "@mui/material";
 import {
   Menu as MenuIcon,
   Logout as LogoutIcon,
-  Home as HomeIcon,
+  Home as HomeIcon
 } from "@mui/icons-material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
@@ -35,18 +36,18 @@ const menuUrls = [
   {
     link: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ1-ffmi662iw7iSin3K1u5-txijie6XwYO6m2x5Nd8A75C8qyRxOs8lxqiKIDtt1kvDM6xiDdl-",
     label: "Reserve",
-    icon: <CalendarMonthIcon />,
+    icon: <CalendarMonthIcon />
   },
   {
     link: "/the-turn/membership",
     label: "Buy Membership",
-    icon: <CreditCardIcon />,
+    icon: <CreditCardIcon />
   },
   {
     link: "/the-turn/gift-cards",
     label: "Buy Gift Card",
-    icon: <CardGiftcardIcon />,
-  },
+    icon: <CardGiftcardIcon />
+  }
 ];
 
 export default function SecondaryHeader({ children }) {
@@ -55,6 +56,7 @@ export default function SecondaryHeader({ children }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const profileMenuOpen = Boolean(anchorEl);
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   const toggleDrawer = () => {
     setMobileOpen(!mobileOpen);
@@ -70,8 +72,9 @@ export default function SecondaryHeader({ children }) {
 
   const signOutHandler = () => {
     dispatch(signOutReducer());
-    handleProfileMenuClose();
     signOut();
+
+    handleProfileMenuClose();
   };
 
   return (
@@ -81,7 +84,7 @@ export default function SecondaryHeader({ children }) {
         position="fixed"
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
-        <Toolbar>
+        <Toolbar sx={{ gap: 2 }}>
           <IconButton
             edge="start"
             color="inherit"
@@ -110,6 +113,13 @@ export default function SecondaryHeader({ children }) {
                 onClose={handleProfileMenuClose}
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
+                slotProps={{
+                  paper: {
+                    sx: {
+                      color: theme.palette.text.primary
+                    }
+                  }
+                }}
               >
                 <MenuItem disabled>
                   <Typography>
@@ -127,10 +137,7 @@ export default function SecondaryHeader({ children }) {
             </>
           ) : (
             <Link href="/the-turn/sign-in" passHref>
-              <Typography
-                variant="body1"
-                sx={{ cursor: "pointer", color: "white" }}
-              >
+              <Typography variant="body1" sx={{ cursor: "pointer" }}>
                 Sign In
               </Typography>
             </Link>
@@ -146,7 +153,9 @@ export default function SecondaryHeader({ children }) {
         sx={{
           "& .MuiDrawer-paper": {
             width: 240,
-          },
+            background: theme.palette.common.white,
+            color: theme.palette.text.primary
+          }
         }}
       >
         <Box sx={{ width: 240 }}>
@@ -190,7 +199,16 @@ export default function SecondaryHeader({ children }) {
       </Drawer>
 
       {/* Main Content */}
-      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          mt: 6,
+          background: theme?.palette?.common?.white,
+          color: theme.palette.common.black
+        }}
+      >
         {children}
       </Box>
     </Box>

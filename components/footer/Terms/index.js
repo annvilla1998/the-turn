@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { Modal, Typography, Box } from "@mui/material";
+import { Modal, Typography, Box, useTheme } from "@mui/material";
 
 export const Terms = ({ style }) => {
   const [open, setOpen] = useState(false);
+  const theme = useTheme();
 
   return (
     <>
-      <Typography
-        onClick={() => setOpen(true)}
-      >
+      <Typography onClick={() => setOpen(true)}>
         Terms and Conditions
       </Typography>
       <Modal
@@ -17,7 +16,12 @@ export const Terms = ({ style }) => {
         aria-labelledby="Terms and Conditions"
         aria-describedby="Terms and Conditions for The Turn"
       >
-        <Box sx={style}>
+        <Box
+          sx={{
+            ...style,
+            backgroundColor: theme.palette.background.default
+          }}
+        >
           <Typography
             id="terms-and-conditions-title"
             variant="h6"

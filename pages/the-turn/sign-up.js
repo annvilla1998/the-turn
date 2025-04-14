@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signUp, clearMessages } from "../../store/user";
+import { signUp } from "../../store/user";
 import SecondaryHeader from "@/components/layouts/SecondaryHeader";
 import Button from "../../components/buttons/button";
 import Input from "../../components/inputs/input";
@@ -9,13 +9,15 @@ import { signIn } from "next-auth/react";
 import * as Yup from "yup";
 import SignInContainer from "@/components/sign-in";
 import Link from "next/link";
+import { Alert } from "@mui/material";
 import Router from "next/router";
+import { logError } from "@/utils/logger";
 
 const initialVal = {
   name: "",
   email: "",
   password: "",
-  conf_password: "",
+  conf_password: ""
 };
 
 export default function SignUp() {
@@ -24,7 +26,7 @@ export default function SignUp() {
   const {
     isLoading,
     resetSuccess: success,
-    error,
+    error
   } = useSelector((state) => state.user);
 
   const handleChange = (e) => {
@@ -49,41 +51,37 @@ export default function SignUp() {
       .max(36, "Password can't be more than 36 characters"),
     conf_password: Yup.string()
       .required("Confirm your password.")
-      .oneOf([Yup.ref("password")], "Passwords must match."),
+      .oneOf([Yup.ref("password")], "Passwords must match.")
   });
 
   const signUpHandler = async (values) => {
     const { name, email, password } = values;
-    
+
     try {
-      // Wait for the signUp action to complete
       const signUpResult = await dispatch(signUp({ name, email, password }));
-      
-      // Check if the signUp was successful
-      // The exact check depends on how your Redux action returns results
+
       if (signUpResult?.error) {
-        console.error("Sign-up error:", signUpResult.error);
-        return; // Don't proceed to sign-in if sign-up failed
+        logError("Sign-up error:", signUpResult.error);
+        return;
       }
-      
-      // Now proceed with sign-in
+
       let options = {
         redirect: false,
-        email: values.email, // Use values from parameter instead of formValues
-        password: values.password,
+        email: values.email,
+        password: values.password
       };
-      
+
       const res = await signIn("credentials", options);
 
       setTimeout(() => {
         if (res?.error) {
-          console.error("Sign-in error:", res.error);
+          logError("Sign-in error:", res.error);
         } else {
           Router.push("/the-turn/reserve");
         }
       }, 2000);
     } catch (error) {
-      console.error("Operation failed:", error);
+      logError("Operation failed:", error);
     }
   };
 
@@ -95,7 +93,7 @@ export default function SignUp() {
         validationSchema={registerValidation}
         onSubmit={signUpHandler}
       >
-        {(form) => (
+        {() => (
           <Form>
             <Input
               type="text"
@@ -131,8 +129,10 @@ export default function SignUp() {
           </Form>
         )}
       </Formik>
-      <div>{success && <span className="success">{success}</span>}</div>
-      <div>{error && <span className="error">{error}</span>}</div>
+      <div>
+        {error && <Alert severity="error">{error}</Alert>}
+        {success && <Alert severity="success">{success}</Alert>}
+      </div>
       <div>
         <Link href="/the-turn/sign-in">Have an account?</Link>
       </div>

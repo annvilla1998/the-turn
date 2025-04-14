@@ -1,5 +1,6 @@
-import prisma from '@/lib/prisma';
-import { sendEmail } from '@/utils/sendEmail';
+import prisma from "@/lib/prisma";
+import { logError } from "@/utils/logger";
+import { sendEmail } from "@/utils/sendEmail";
 
 export default async function handler(req, res) {
   const { email, purpose } = req.query;
@@ -7,17 +8,21 @@ export default async function handler(req, res) {
   const user = await prisma.user.findFirst({
     where: {
       email
-    },
+    }
   });
 
-  if(!user) {
-    return res.status(404).json({ message: 'User does not exist.' });
+  if (!user) {
+    return res.status(404).json({ message: "User does not exist." });
   }
 
   try {
-    await sendEmail(user.id, purpose);
-    res.status(200).json({ message: 'A message has been sent to your email with instructions to reset your password.' });
+    await sendEmail({ user, purpose });
+    res.status(200).json({
+      message:
+        "A message has been sent to your email with instructions to reset your password."
+    });
   } catch (e) {
-    res.status(500).json({ message: 'Failed to send email.' });
+    logError("Failed to send email:", e);
+    res.status(500).json({ message: "Failed to send email." });
   }
 }

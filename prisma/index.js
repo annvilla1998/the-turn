@@ -1,52 +1,34 @@
-import { randString } from '../utils/randString.js';
-import prisma from '../lib/prisma.js';
+import { randString } from "../utils/randString.js";
+import prisma from "../lib/prisma.js";
+import { logError } from "..//utils/logger.js";
 
 const users = [
   {
-    name: 'Daniel Gonzalez',
-    email: 'theturnvv@gmail.com',
+    name: "Daniel Gonzalez",
+    email: "theturnvv@gmail.com",
     password: process.env.DEFAULT_PW,
     unique_str: randString(),
-    role: "admin",
+    role: "admin"
   },
   {
     id: "7f0c3a11-aec0-4797-aad5-c3d79c1619e7",
-    name: 'Test',
-    email: 'villalobos1998@gmail.com',
-    password: 'test',
+    name: "Anabel",
+    email: "villalobos1998@gmail.com",
+    password: process.env.DEFAULT_PW,
     unique_str: randString(),
-  },
-];
-
-const reservations = [
-  {
-    user_id: "7f0c3a11-aec0-4797-aad5-c3d79c1619e7",
-    date: new Date(2024, 11, 1),
-    service_time: 1,
-    time: '10:00 am',
-    payment_status: false,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
+    role: "admin"
+  }
 ];
 
 async function main() {
-  console.log('Seeding users...');
+  console.log("Seeding users...");
   for (const u of users) {
     const user = await prisma.user.create({
-      data: u,
+      data: u
     });
     console.log(`Created user with id ${user.id}`);
   }
-  console.log('Done seeding.');
-
-  console.log('Seeding reservations...');
-  for (const r of reservations) {
-    const reservation = await prisma.reservation.create({
-      data: r,
-    });
-    console.log(`Created reservation with id ${reservation.id}`);
-  }
+  console.log("Done seeding.");
 }
 
 main()
@@ -54,7 +36,7 @@ main()
     await prisma.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e);
+    logError("Error seeing users", e);
     await prisma.$disconnect();
     process.exit(1);
   });

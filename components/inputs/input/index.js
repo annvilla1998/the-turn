@@ -1,3 +1,4 @@
+import React from "react";
 import { TextField } from "@mui/material";
 import styles from "./styles.module.scss";
 import { useField } from "formik";
@@ -12,11 +13,10 @@ export default function Input({ label, placeholder, ...props }) {
     >
       <TextField
         sx={{
-          margin: "10px 0",
+          margin: "10px 0"
         }}
         required
         size="small"
-        id="outlined-basic"
         label={label}
         type={field.type}
         helperText={meta.error}

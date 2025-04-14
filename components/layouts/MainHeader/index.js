@@ -1,32 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./styles.module.scss";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { IoIosMenu } from "react-icons/io";
 import Footer from "@/components/footer";
 import { markSubscriptionPromptAsSeen } from "@/store/user";
-import { Box, Modal, Typography } from "@mui/material";
+import { Box, Modal, Typography, useTheme } from "@mui/material";
 import Button from "@/components/buttons/button";
 import { signOutReducer } from "../../../store/user";
 import { signOut } from "next-auth/react";
 import Router from "next/router";
 
 const menuUrls = [
-  // { link: "/the-turn/reserve", label: "Reserve Now" },
+  // { link: "/the-turn/reserve", label: "Reserve" },
   {
     link: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ1-ffmi662iw7iSin3K1u5-txijie6XwYO6m2x5Nd8A75C8qyRxOs8lxqiKIDtt1kvDM6xiDdl-",
-    label: "Reserve Now",
+    label: "Reserve"
   },
   // { link: '/memberships', label: 'Memberships' },
   // { link: '/events', label: 'Events' },
   // { link: "/the-turn/gift-cards", label: "Gift Cards" },
   { label: "Subscribe", link: "/" },
   // { link: '/about-us', label: 'About Us' },
-  { link: "#contact-us", label: "Contact Us" },
+  { link: "#contact-us", label: "Contact Us" }
 ];
 
 export default function MainHeader({ children }) {
   const dispatch = useDispatch();
+  const theme = useTheme();
   const [showMenu, setShowMenu] = useState(false);
   const [showSubscribed, setShowSubscribed] = useState(false);
   const user = useSelector((state) => state.user.currentUser);
@@ -36,17 +37,17 @@ export default function MainHeader({ children }) {
       Router.push("/the-turn/sign-up");
       return;
     }
-    
+
     if (!user.verified) {
       Router.push("/the-turn/reserve");
       return;
     }
-    
+
     if (!user.subscribed) {
       dispatch(markSubscriptionPromptAsSeen(false));
       return;
     }
-    
+
     if (user.subscribed) {
       setShowSubscribed(true);
       return;
@@ -61,7 +62,10 @@ export default function MainHeader({ children }) {
   return (
     <>
       <header>
-        <nav className={`${styles.nav} ${showMenu ? styles.nav__menu : ""}`}>
+        <nav
+          style={{ background: theme?.palette?.custom?.navColor }}
+          className={`${styles.nav} ${showMenu ? styles.nav__menu : ""}`}
+        >
           <Link href="/">
             <img
               src="/images/logo.png"
@@ -77,7 +81,7 @@ export default function MainHeader({ children }) {
                 <li key={i}>
                   <Link
                     // Remove after booking is implemented
-                    target={label === "Reserve Now" ? "_blank" : null}
+                    target={label === "Reserve" ? "_blank" : null}
                     onClick={() => {
                       if (label === "Subscribe") {
                         handleSubscribe();
@@ -125,7 +129,7 @@ export default function MainHeader({ children }) {
             bgcolor: "background.paper",
             boxShadow: 24,
             textAlign: "center",
-            p: 4,
+            p: 4
           }}
         >
           <Typography sx={{ mb: 2 }}>You've already subscribed!</Typography>
