@@ -71,6 +71,7 @@ async function sendNewsletter(req, res) {
 
   form.parse(req, async (err, fields, files) => {
     if (err) {
+      logError("Upload Error", err);
       return res.status(500).json({ message: "Upload error" });
     }
     const [caption] = fields.caption;
