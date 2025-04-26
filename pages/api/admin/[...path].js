@@ -2,8 +2,6 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { isAdmin } from "@/lib/auth";
 import { sendEmail } from "@/utils/sendEmail";
-import { IncomingForm } from "formidable";
-import path from "path";
 import prisma from "@/lib/prisma";
 import { logError } from "@/utils/logger";
 
@@ -53,59 +51,44 @@ export const config = {
   }
 };
 
-const uploadDir = path.join(process.cwd(), "/public/uploads");
-
 async function sendNewsletter(req, res) {
   if (req.method !== "POST") return res.status(405).end();
+  if (req.headers["content-type"] === "application/json") {
+    const chunks = [];
+    for await (const chunk of req) {
+      chunks.push(chunk);
+    }
+    const rawBody = Buffer.concat(chunks).toString("utf8");
+    req.body = JSON.parse(rawBody);
+  }
 
   const subscribedUsers = await prisma.user.findMany({
     where: {
       subscribed: true
     }
   });
+  const { subjectMessage, caption, imageUrl } = req.body;
 
-  const form = new IncomingForm({
-    uploadDir,
-    keepExtensions: true
-  });
+  if (!imageUrl || !subjectMessage || !caption) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
 
-  form.parse(req, async (err, fields, files) => {
-    if (err) {
-      logError("Upload Error", err);
-      return res.status(500).json({ message: "Upload error" });
-    }
-    const [caption] = fields.caption;
-    const [subjectMessage] = fields.subjectMessage;
-    const file = files.file?.[0] || files.file;
+  try {
+    await sendEmail({
+      users: subscribedUsers,
+      purpose: "newsletter",
+      subjectMessage,
+      imageUrl,
+      caption
+    });
 
-    if (!file || !subjectMessage) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
-
-    const imageUrl = `${process.env.NEXT_PUBLIC_API_URL}/uploads/${path.basename(file.filepath)}`;
-
-    try {
-      if (!subscribedUsers.length) {
-        return res.status(404).json({ message: "No subscribed users" });
-      }
-
-      await sendEmail({
-        users: subscribedUsers,
-        purpose: "newsletter",
-        subjectMessage,
-        imageUrl,
-        caption
-      });
-
-      return res.status(200).json({
-        message: "Successfully sent newsletter to all subscribed users."
-      });
-    } catch (error) {
-      logError("Error fetching users:", error);
-
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  });
+    return res.status(200).json({
+      message: "Successfully sent newsletter to all subscribed users."
+    });
+  } catch (error) {
+    logError("Error fetching users:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
 }
 
 async function getUsers(req, res) {

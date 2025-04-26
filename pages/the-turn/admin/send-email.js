@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { logError } from "@/utils/logger";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function SendEmail() {
   const { data: session, status } = useSession();
@@ -48,18 +49,37 @@ export default function SendEmail() {
 
     if (!file) return setError("Please select an image.");
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("caption", caption);
-    formData.append("subjectMessage", subjectMessage);
-
     setLoading(true);
     setError("");
     setFeedback("");
+
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    const { error: uploadError, data } = await supabase.storage
+      .from("uploads")
+      .upload(filePath, file);
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    const { data: url } = await supabase.storage
+      .from("uploads")
+      .getPublicUrl(data.path);
+
     try {
       const res = await fetch("/api/admin/send-newsletter", {
         method: "POST",
-        body: formData
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          subjectMessage,
+          caption,
+          imageUrl: url.publicUrl
+        })
       });
 
       const data = await res.json();
@@ -89,9 +109,10 @@ export default function SendEmail() {
           margin="normal"
         />
         <TextField
+          multiline
           fullWidth
-          optional
-          label="Caption (optional)"
+          rows={3}
+          label="Caption"
           value={caption}
           onChange={(e) => setCaption(e.target.value)}
           margin="normal"
