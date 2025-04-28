@@ -34,8 +34,8 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 
 const menuUrls = [
   {
-    link: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ1-ffmi662iw7iSin3K1u5-txijie6XwYO6m2x5Nd8A75C8qyRxOs8lxqiKIDtt1kvDM6xiDdl-",
-    label: "Reserve",
+    link: "/the-turn/reserve",
+    label: "Reserve A Bay",
     icon: <CalendarMonthIcon />
   },
   {

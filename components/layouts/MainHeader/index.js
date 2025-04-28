@@ -12,11 +12,7 @@ import { signOut } from "next-auth/react";
 import Router from "next/router";
 
 const menuUrls = [
-  // { link: "/the-turn/reserve", label: "Reserve" },
-  {
-    link: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ1-ffmi662iw7iSin3K1u5-txijie6XwYO6m2x5Nd8A75C8qyRxOs8lxqiKIDtt1kvDM6xiDdl-",
-    label: "Reserve"
-  },
+  { link: "/the-turn/reserve", label: "Reserve A Bay" },
   // { link: '/memberships', label: 'Memberships' },
   // { link: '/events', label: 'Events' },
   // { link: "/the-turn/gift-cards", label: "Gift Cards" },
@@ -81,7 +77,7 @@ export default function MainHeader({ children }) {
                 <li key={i}>
                   <Link
                     // Remove after booking is implemented
-                    target={label === "Reserve" ? "_blank" : null}
+                    // target={label === "Reserve" ? "_blank" : null}
                     onClick={() => {
                       if (label === "Subscribe") {
                         handleSubscribe();
