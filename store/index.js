@@ -1,15 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
-import { thunk } from "redux-thunk";
+// import { thunk } from "redux-thunk";
 import logger from "redux-logger";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
-import reservationReducer from "./reservation";
+// import reservationReducer from "./reservation";
 import userReducer from "./user";
+import { reservationsApi } from "./apis/reservation";
 
 const reducers = combineReducers({
-  reservation: reservationReducer,
-  user: userReducer
+  // reservation: reservationReducer,
+  user: userReducer,
+  [reservationsApi.reducerPath]: reservationsApi.reducer
 });
 
 const persistConfig = {
@@ -17,6 +19,7 @@ const persistConfig = {
   key: "root",
   storage,
   whitelist: ["user"],
+  blacklist: [reservationsApi.reducer],
   timeout: 1000
 };
 
@@ -29,7 +32,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) => {
     const middlewares = getDefaultMiddleware({
       serializableCheck: false
-    }).concat(thunk);
+    }).concat(reservationsApi.middleware);
 
     if (process.env.NODE_ENV !== "production") {
       middlewares.push(logger);

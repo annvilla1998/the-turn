@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import { useGetReservationsQuery } from "../../store/apis/reservation";
 
 const weekdays = ["Mon", "Tues", "Wed", "Thurs"];
 
@@ -55,21 +56,21 @@ export default function Reserve() {
           value={day}
           onChange={(newValue) => setDay(newValue)}
         />
-        <Bays dayOfWeek={days[day.day()]} />
+        <Bays dayOfWeek={days[day.day()]} day={day} />
       </Stack>
     </ProtectedRoute>
   );
 }
 
-function Bays({ dayOfWeek }) {
+function Bays({ dayOfWeek, day }) {
   const theme = useTheme();
   const [selected, setSelected] = useState(null);
+  const { data: reservations } = useGetReservationsQuery();
 
   return (
     <Grid container spacing={4}>
       {["Bay 1", "Bay 2", "Bay 3", "Bay 4"].map((suite, i) => {
         const times = getTimes(dayOfWeek);
-        const available = true;
         const currBay = suite.split(" ")[1];
 
         return (
@@ -94,18 +95,29 @@ function Bays({ dayOfWeek }) {
                 </Typography>
               </Paper>
               {times.map(({ price, time }, i) => {
+                const available = !reservations?.some(
+                  ({ date, time: reservedTime, note }) =>
+                    note === currBay &&
+                    dayjs(date).get("year") === day.get("year") &&
+                    dayjs(date).get("month") === day.get("month") &&
+                    dayjs(date).get("date") === day.get("date") &&
+                    reservedTime === time
+                );
+
                 const parsedTime = Number(time.split(":")[0]);
                 const timeInMilitary =
-                  parsedTime >= 12 ? parsedTime + 12 : parsedTime;
+                  parsedTime < 10 ? parsedTime + 12 : parsedTime;
+
                 const currToken = available
                   ? theme.palette.info.main
                   : theme.palette.warning.light;
-                const disabled = dayjs().hour() <= timeInMilitary;
+                const disabled = dayjs().hour() >= timeInMilitary;
+
                 return (
                   <Paper
                     key={i}
                     sx={{
-                      cursor: "pointer",
+                      cursor: disabled || !available ? "" : "pointer",
                       padding: "15px",
                       textAlign: "center",
                       border: `1px solid ${disabled ? theme.palette.action.disabled : currToken}`,
@@ -119,12 +131,17 @@ function Bays({ dayOfWeek }) {
                           ? theme.palette.action.selected
                           : "",
                       "&:hover": {
-                        backgroundColor: theme.palette.action.hover
+                        backgroundColor:
+                          !disabled && available
+                            ? theme.palette.action.hover
+                            : ""
                       }
                     }}
                     variant="outlined"
                     onClick={() => {
-                      setSelected({ bay: currBay, time });
+                      if (!disabled && available) {
+                        setSelected({ bay: currBay, time });
+                      }
                     }}
                   >
                     <Stack spacing={1}>
