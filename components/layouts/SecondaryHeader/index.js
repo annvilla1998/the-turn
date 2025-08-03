@@ -31,6 +31,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const menuUrls = [
   {
@@ -47,6 +48,11 @@ const menuUrls = [
     link: "/the-turn/gift-cards",
     label: "Buy Gift Card",
     icon: <CardGiftcardIcon />
+  },
+  {
+    link: "/the-turn/checkout",
+    label: "Checkout",
+    icon: <ShoppingCartIcon />
   }
 ];
 
@@ -94,7 +100,9 @@ export default function SecondaryHeader({ children }) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            The Turn
+            <Link href="/" passHref>
+              The Turn
+            </Link>
           </Typography>
           {session ? (
             <>

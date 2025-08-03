@@ -4,12 +4,12 @@ import { combineReducers } from "redux";
 import logger from "redux-logger";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
-// import reservationReducer from "./reservation";
+import cartReducer from "./cart";
 import userReducer from "./user";
 import { reservationsApi } from "./apis/reservation";
 
 const reducers = combineReducers({
-  // reservation: reservationReducer,
+  cart: cartReducer,
   user: userReducer,
   [reservationsApi.reducerPath]: reservationsApi.reducer
 });
@@ -18,7 +18,7 @@ const persistConfig = {
   version: 1,
   key: "root",
   storage,
-  whitelist: ["user"],
+  whitelist: ["user", "cart"],
   blacklist: [reservationsApi.reducer],
   timeout: 1000
 };

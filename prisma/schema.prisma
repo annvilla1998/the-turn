@@ -32,11 +32,12 @@ model User {
 model Reservation {
   id             String   @id @default(uuid())
   user           User     @relation(fields: [user_id], references: [id])
-  user_id        String      @unique
+  user_id        String   
   date           DateTime
-  service_time   Float
+  service_time   Int      
   time           String
   payment_status Boolean
+  bay            Int      @default(0)
   note           String?  @db.VarChar(400)
   occasion       String?
   created_at     DateTime

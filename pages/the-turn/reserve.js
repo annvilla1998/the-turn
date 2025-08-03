@@ -8,11 +8,19 @@ import {
   Button,
   Stack,
   Typography,
-  useTheme
+  useTheme,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useGetReservationsQuery } from "../../store/apis/reservation";
+import { addToCart } from "@/store/cart";
+import { useDispatch } from "react-redux";
+import Router from "next/router";
 
 const weekdays = ["Mon", "Tues", "Wed", "Thurs"];
 
@@ -29,7 +37,7 @@ const getTimes = (dayOfWeek) => {
     }
     times.push({
       time: `${currTime}:00 ${i > 11 ? "PM" : "AM"}`,
-      price: `${currPrice}`
+      price: currPrice
     });
   }
 
@@ -64,11 +72,57 @@ export default function Reserve() {
 
 function Bays({ dayOfWeek, day }) {
   const theme = useTheme();
+  // { bay: 1, time: "10:00", price: "50", service_time: 1 }
   const [selected, setSelected] = useState(null);
+  const [showDurationDialog, setShowDurationDialog] = useState(false);
+  const [pendingSelection, setPendingSelection] = useState(null);
+  const [selectedDuration, setSelectedDuration] = useState(1);
+  const [note, setNote] = useState("");
+  const [occasion, setOccasion] = useState("");
   const { data: reservations } = useGetReservationsQuery();
+  const dispatch = useDispatch();
+
+  const handleTimeSlotClick = (bay, time, price) => {
+    setSelected({ bay, time, price });
+  };
+
+  const handleReserveClick = () => {
+    if (!selected) return;
+    setPendingSelection(selected);
+    setSelectedDuration(1);
+    setNote("");
+    setOccasion("");
+    setShowDurationDialog(true);
+  };
+
+  const handleConfirmReservation = () => {
+    if (pendingSelection) {
+      const finalReservation = {
+        date: day.toISOString(),
+        time: pendingSelection.time,
+        service_time: selectedDuration,
+        bay: pendingSelection.bay,
+        note: note.trim() || null,
+        occasion: occasion.trim() || null
+      };
+
+      dispatch(
+        addToCart({
+          item: "reservation",
+          price: pendingSelection.price,
+          details: finalReservation
+        })
+      );
+
+      Router.push("/the-turn/checkout");
+    }
+    setShowDurationDialog(false);
+    setPendingSelection(null);
+    setSelected(null);
+  };
 
   return (
-    <Grid container spacing={4}>
+    <Grid container spacing={1}>
       {["Bay 1", "Bay 2", "Bay 3", "Bay 4"].map((suite, i) => {
         const times = getTimes(dayOfWeek);
         const currBay = suite.split(" ")[1];
@@ -96,12 +150,49 @@ function Bays({ dayOfWeek, day }) {
               </Paper>
               {times.map(({ price, time }, i) => {
                 const available = !reservations?.some(
-                  ({ date, time: reservedTime, note }) =>
-                    note === currBay &&
-                    dayjs(date).get("year") === day.get("year") &&
-                    dayjs(date).get("month") === day.get("month") &&
-                    dayjs(date).get("date") === day.get("date") &&
-                    reservedTime === time
+                  ({ date, time: reservedTime, bay, service_time }) => {
+                    // Skip if different bay
+                    if (bay && bay !== parseInt(currBay)) {
+                      return false;
+                    }
+
+                    // Skip if different date
+                    if (
+                      dayjs(date).get("year") !== day.get("year") ||
+                      dayjs(date).get("month") !== day.get("month") ||
+                      dayjs(date).get("date") !== day.get("date")
+                    ) {
+                      return false;
+                    }
+
+                    // Convert current time to 24-hour format
+                    const currentTimeHour = parseInt(time.split(":")[0]);
+                    const currentTimeIn24 =
+                      time.includes("PM") && currentTimeHour !== 12
+                        ? currentTimeHour + 12
+                        : time.includes("AM") && currentTimeHour === 12
+                          ? 0
+                          : currentTimeHour;
+
+                    // Convert reserved time to 24-hour format
+                    const reservedTimeHour = parseInt(
+                      reservedTime.split(":")[0]
+                    );
+                    const reservedTimeIn24 =
+                      reservedTime.includes("PM") && reservedTimeHour !== 12
+                        ? reservedTimeHour + 12
+                        : reservedTime.includes("AM") && reservedTimeHour === 12
+                          ? 0
+                          : reservedTimeHour;
+
+                    // Check if current time falls within the reserved time range
+                    const reservationEndTime =
+                      reservedTimeIn24 + (service_time || 1);
+                    return (
+                      currentTimeIn24 >= reservedTimeIn24 &&
+                      currentTimeIn24 < reservationEndTime
+                    );
+                  }
                 );
 
                 const parsedTime = Number(time.split(":")[0]);
@@ -126,9 +217,9 @@ function Bays({ dayOfWeek, day }) {
                         : currToken,
                       backgroundColor:
                         selected &&
-                        selected.bay === currBay &&
+                        selected.bay === parseInt(currBay) &&
                         selected.time === time
-                          ? theme.palette.action.selected
+                          ? "rgba(0, 0, 0, 0.1)"
                           : "",
                       "&:hover": {
                         backgroundColor:
@@ -140,7 +231,7 @@ function Bays({ dayOfWeek, day }) {
                     variant="outlined"
                     onClick={() => {
                       if (!disabled && available) {
-                        setSelected({ bay: currBay, time });
+                        handleTimeSlotClick(parseInt(currBay), time, price);
                       }
                     }}
                   >
@@ -168,6 +259,79 @@ function Bays({ dayOfWeek, day }) {
           </Grid>
         );
       })}
+
+      <Dialog
+        open={showDurationDialog}
+        onClose={() => setShowDurationDialog(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          Complete Your Reservation for Bay {pendingSelection?.bay} at{" "}
+          {pendingSelection?.time}
+        </DialogTitle>
+        <DialogContent>
+          <Stack spacing={3} sx={{ mt: 1 }}>
+            <div>
+              <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                How long would you like to golf?
+              </Typography>
+              <Stack direction="row" spacing={2} justifyContent="center">
+                <Button
+                  variant={selectedDuration === 1 ? "contained" : "outlined"}
+                  onClick={() => setSelectedDuration(1)}
+                  sx={{ minWidth: "80px" }}
+                >
+                  1 Hour
+                </Button>
+                <Button
+                  variant={selectedDuration === 2 ? "contained" : "outlined"}
+                  onClick={() => setSelectedDuration(2)}
+                  sx={{ minWidth: "80px" }}
+                >
+                  2 Hours
+                </Button>
+                <Button
+                  variant={selectedDuration === 3 ? "contained" : "outlined"}
+                  onClick={() => setSelectedDuration(3)}
+                  sx={{ minWidth: "80px" }}
+                >
+                  3 Hours
+                </Button>
+              </Stack>
+            </div>
+
+            <TextField
+              label="Occasion (Optional)"
+              placeholder="Birthday, Anniversary, Corporate Event, etc."
+              value={occasion}
+              onChange={(e) => setOccasion(e.target.value)}
+              fullWidth
+            />
+
+            <TextField
+              label="Additional Notes (Optional)"
+              placeholder="Any special requests or information..."
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              multiline
+              rows={3}
+              fullWidth
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowDurationDialog(false)}>Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={handleConfirmReservation}
+            color="primary"
+          >
+            Confirm Reservation
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       <Button
         color="primary"
         variant="contained"
@@ -176,9 +340,14 @@ function Bays({ dayOfWeek, day }) {
         sx={{
           position: "fixed",
           bottom: 20,
-          left: "40%",
-          width: "300px"
+          left: "30%",
+          width: "500px",
+          "@media (max-width: 600px)": {
+            width: "100%",
+            left: 0
+          }
         }}
+        onClick={handleReserveClick}
       >
         Reserve
       </Button>
