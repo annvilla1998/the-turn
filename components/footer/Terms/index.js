@@ -7,7 +7,16 @@ export const Terms = ({ style }) => {
 
   return (
     <>
-      <Typography onClick={() => setOpen(true)}>
+      <Typography
+        onClick={() => setOpen(true)}
+        sx={{
+          cursor: "pointer",
+          color: "#fff",
+          ":hover": {
+            opacity: 0.8
+          }
+        }}
+      >
         Terms and Conditions
       </Typography>
       <Modal
@@ -19,7 +28,8 @@ export const Terms = ({ style }) => {
         <Box
           sx={{
             ...style,
-            backgroundColor: theme.palette.background.default
+            backgroundColor: theme.palette.background.default,
+            overflowY: "auto"
           }}
         >
           <Typography
@@ -30,7 +40,7 @@ export const Terms = ({ style }) => {
             Terms & Conditions
           </Typography>
           <br />
-          <Typography id="terms-and-conditions" variant="p" component="p">
+          <Typography id="terms-and-conditions" variant="body1" component="p">
             Welcome to The Turn By using this indoor golf simulator, you ("the
             User") agree to the following terms and conditions. Please read
             these terms carefully before using the Simulator:
