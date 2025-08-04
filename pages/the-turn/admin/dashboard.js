@@ -2,11 +2,9 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useSession, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-
 import AdminLayout from "@/components/layouts/AdminLayout";
 import {
   Paper,
-  Typography,
   Chip,
   Alert,
   Table,
@@ -18,16 +16,21 @@ import {
   TableRow,
   TablePagination,
   Box,
-  CircularProgress
+  CircularProgress,
+  Tabs,
+  Tab
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { logError } from "@/utils/logger";
+import { useGetReservationsQuery } from "@/store/apis/reservation";
 
 export default function AdminDashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [activeTab, setActiveTab] = useState(1);
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
+  const { data: reservations } = useGetReservationsQuery();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [error, setError] = useState("");
@@ -43,6 +46,11 @@ export default function AdminDashboard() {
       fetchUsers();
     }
   }, [session, status, router]);
+
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+    setPage(0); // Reset pagination when switching tabs
+  };
 
   async function fetchUsers() {
     try {
@@ -99,30 +107,23 @@ export default function AdminDashboard() {
     return null;
   }
 
-  return (
-    <AdminLayout>
-      <Typography variant="h4" gutterBottom component="h1">
-        Users
-      </Typography>
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-      <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Role</TableCell>
-                <TableCell>Subscribed</TableCell>
-                <TableCell align="right">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {users
+  // Function to render the users tab content
+  const renderUsersTab = () => (
+    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <TableContainer>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Role</TableCell>
+              <TableCell>Subscribed</TableCell>
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users &&
+              users
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((user) => (
                   <TableRow hover key={user.id}>
@@ -155,10 +156,106 @@ export default function AdminDashboard() {
                     </TableCell>
                   </TableRow>
                 ))}
-              {users.length === 0 && (
+            {users && users.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={5} align="center">
+                  No users found
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={users.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
+  );
+
+  // Function to sort reservations by date (soonest first)
+  const getSortedReservations = () => {
+    if (!reservations) return [];
+
+    return [...reservations].sort((a, b) => {
+      // First compare by date
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+
+      if (dateA.getTime() !== dateB.getTime()) {
+        return dateB - dateA; // Ascending date order (soonest first)
+      }
+
+      // If same date, compare by time
+      // Convert time strings to comparable values (e.g. "6:00 PM" to minutes)
+      const timeToMinutes = (timeStr) => {
+        if (!timeStr) return 0; // Handle null/undefined times
+
+        try {
+          const [timePart, period] = timeStr.split(" ");
+          let [hours, minutes] = timePart.split(":").map(Number);
+
+          // Handle 12-hour format conversion to 24-hour
+          if (period === "PM" && hours !== 12) hours += 12;
+          if (period === "AM" && hours === 12) hours = 0;
+
+          return hours * 60 + (minutes || 0); // In case minutes is undefined
+        } catch {
+          return 0; // Default value if parsing fails
+        }
+      };
+
+      return timeToMinutes(b.time) - timeToMinutes(a.time);
+    });
+  };
+
+  // Function to render the reservations tab content
+  const renderReservationsTab = () => {
+    const sortedReservations = getSortedReservations();
+
+    return (
+      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        <TableContainer>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell>Date</TableCell>
+                <TableCell>Time</TableCell>
+                <TableCell>Duration</TableCell>
+                <TableCell>Bay</TableCell>
+                <TableCell>User</TableCell>
+                <TableCell>Occasion</TableCell>
+                <TableCell>Notes</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {sortedReservations
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((reservation) => {
+                  const user = users.find((u) => u.id === reservation.user_id);
+                  return (
+                    <TableRow hover key={reservation.id}>
+                      <TableCell>
+                        {new Date(reservation.date).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>{reservation.time}</TableCell>
+                      <TableCell>{reservation.service_time} hour(s)</TableCell>
+                      <TableCell>{reservation.bay}</TableCell>
+                      <TableCell>{user?.email || "—"}</TableCell>
+                      <TableCell>{reservation.occasion || "—"}</TableCell>
+                      <TableCell>{reservation.note || "—"}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              {sortedReservations.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={5} align="center">
-                    No users found
+                  <TableCell colSpan={7} align="center">
+                    No reservations found
                   </TableCell>
                 </TableRow>
               )}
@@ -168,13 +265,37 @@ export default function AdminDashboard() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={users.length}
+          count={sortedReservations.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+    );
+  };
+
+  return (
+    <AdminLayout>
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
+      <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          aria-label="admin dashboard tabs"
+          variant="fullWidth"
+        >
+          <Tab label="Users" />
+          <Tab label="Reservations" />
+        </Tabs>
+      </Box>
+
+      {activeTab === 0 ? renderUsersTab() : renderReservationsTab()}
     </AdminLayout>
   );
 }

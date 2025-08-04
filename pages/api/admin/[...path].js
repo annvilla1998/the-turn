@@ -93,7 +93,18 @@ async function sendNewsletter(req, res) {
 
 async function getUsers(req, res) {
   try {
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        subscribed: true,
+        verified: true,
+        created_at: true,
+        updated_at: true
+      }
+    });
 
     return res.status(200).json({
       users
