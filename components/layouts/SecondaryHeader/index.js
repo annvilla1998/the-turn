@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
-import { signOutReducer } from "@/store/user";
 import { useSession, signOut } from "next-auth/react";
 import { isAdmin } from "@/lib/auth";
 import {
@@ -61,7 +59,6 @@ export default function SecondaryHeader({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const profileMenuOpen = Boolean(anchorEl);
-  const dispatch = useDispatch();
   const theme = useTheme();
 
   const toggleDrawer = () => {
@@ -77,9 +74,9 @@ export default function SecondaryHeader({ children }) {
   };
 
   const signOutHandler = async () => {
-    dispatch(signOutReducer());
+    // First sign out with NextAuth (this will trigger our SessionSync component)
     await signOut({ redirect: false });
-
+    // Close the menu
     handleProfileMenuClose();
   };
 

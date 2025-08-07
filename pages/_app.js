@@ -13,6 +13,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import theme from "@/utils/theme";
 import SubscriptionCheck from "@/components/subscription-check";
+import SessionSync from "@/components/session-sync";
 let persistor = persistStore(store);
 
 export default function App({
@@ -40,6 +41,7 @@ export default function App({
         </Head>
         <SessionProvider session={session}>
           <Provider store={store}>
+            <SessionSync />
             <SubscriptionCheck />
             <PersistGate loading={null} persistor={persistor}>
               {getLayout(<Component {...pageProps} />)}

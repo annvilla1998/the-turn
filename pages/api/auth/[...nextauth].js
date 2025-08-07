@@ -36,13 +36,31 @@ export const authOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
+      // When user signs in, add all user properties to the token
       if (user) {
+        token.id = user.id;
         token.role = user.role;
+        token.name = user.name;
+        token.email = user.email;
+        token.member = user.member;
+        token.verified = user.verified;
+        token.subscribed = user.subscribed;
+        token.unsubscribe_token = user.unsubscribe_token;
+        token.unique_str = user.unique_str;
       }
       return token;
     },
     async session({ session, token }) {
+      // Copy all properties from token to the session.user
+      session.user.id = token.id;
       session.user.role = token.role;
+      session.user.name = token.name;
+      session.user.email = token.email;
+      session.user.member = token.member;
+      session.user.verified = token.verified;
+      session.user.subscribed = token.subscribed;
+      session.user.unsubscribe_token = token.unsubscribe_token;
+      session.user.unique_str = token.unique_str;
       return session;
     }
   },
