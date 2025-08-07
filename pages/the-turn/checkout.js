@@ -20,7 +20,7 @@ import dayjs from "dayjs";
 
 export default function Checkout() {
   const dispatch = useDispatch();
-  const { cart } = useSelector((state) => state.cart);
+  const { cart } = useSelector((state) => state);
 
   const handleRemoveItem = (index) => {
     dispatch(removeFromCart(index));
@@ -34,7 +34,7 @@ export default function Checkout() {
     return dayjs(dateString).format("MMM DD, YYYY");
   };
 
-  if (cart.items.length === 0) {
+  if (cart?.items.length === 0) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box
@@ -87,7 +87,7 @@ export default function Checkout() {
         <Grid container spacing={4}>
           <Grid item xs={12} md={8} flex={1} minWidth={250}>
             <Stack spacing={2}>
-              {cart.items.map((item, index) => (
+              {cart?.items.map((item, index) => (
                 <Card key={index} variant="outlined">
                   <CardContent>
                     <Box
@@ -115,6 +115,10 @@ export default function Checkout() {
                             {item.details.service_time} hour
                             {item.details.service_time > 1 ? "s" : ""}
                           </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            <strong>Base Price:</strong> $
+                            {item.details.basePrice} / hour
+                          </Typography>
                           {item.details.occasion && (
                             <Typography variant="body2" color="text.secondary">
                               <strong>Occasion:</strong> {item.details.occasion}
@@ -128,17 +132,34 @@ export default function Checkout() {
                         </Stack>
                       </Box>
 
-                      <Box display="flex" alignItems="center" gap={1}>
-                        <Typography variant="h6" color="primary">
-                          ${item.price}.00
-                        </Typography>
-                        <IconButton
-                          color="error"
-                          onClick={() => handleRemoveItem(index)}
-                          size="small"
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        flexDirection="column"
+                        justifyContent="space-between"
+                        gap={1}
+                      >
+                        <Stack
+                          direction="row"
+                          width="100%"
+                          justifyContent="flex-end"
                         >
-                          <DeleteIcon />
-                        </IconButton>
+                          <Typography variant="h6" color="primary">
+                            ${item.price}.00
+                          </Typography>
+                          <IconButton
+                            color="error"
+                            onClick={() => handleRemoveItem(index)}
+                            size="small"
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Stack>
+                        {item.item === "reservation" && (
+                          <Typography variant="body2" color="text.secondary">
+                            $10 non-refundable deposit due now.
+                          </Typography>
+                        )}
                       </Box>
                     </Box>
                   </CardContent>
@@ -158,9 +179,9 @@ export default function Checkout() {
                 <Stack spacing={2}>
                   <Box display="flex" justifyContent="space-between">
                     <Typography variant="body1">
-                      Items ({cart.items.length})
+                      Items ({cart?.items.length})
                     </Typography>
-                    <Typography variant="body1">${cart.total}.00</Typography>
+                    <Typography variant="body1">${cart?.total}.00</Typography>
                   </Box>
 
                   <Divider />
@@ -168,7 +189,7 @@ export default function Checkout() {
                   <Box display="flex" justifyContent="space-between">
                     <Typography variant="h6">Total</Typography>
                     <Typography variant="h6" color="primary">
-                      ${cart.total}.00
+                      ${cart?.total}.00
                     </Typography>
                   </Box>
 

@@ -8,10 +8,8 @@ import { createSlice } from "@reduxjs/toolkit";
  * }
  */
 const initialState = {
-  cart: {
-    items: [],
-    total: 0
-  },
+  items: [],
+  total: 0,
   isLoading: false,
   error: null
 };
@@ -22,23 +20,32 @@ const cartSlice = createSlice({
   reducers: {
     addToCart(state, action) {
       const item = action.payload;
-      state.cart.items.push(item);
-      state.cart.total += item.price;
+      state.items.push(item);
+
+      if (item.item === "reservation") {
+        state.total += 10; // $10 deposit for reservations
+      } else {
+        state.total += item.price; // Add full price for other items
+      }
 
       state.isLoading = false;
       state.error = null;
     },
     removeFromCart(state, action) {
       const index = action.payload;
-      const item = state.cart.items[index];
+      const item = state.items[index];
       if (item) {
-        state.cart.total -= item.price;
-        state.cart.items.splice(index, 1);
+        if (item.item === "reservation") {
+          state.total -= 10; // $10 deposit for reservations
+        } else {
+          state.total -= item.price; // Subtract full price for other items
+        }
+        state.items.splice(index, 1);
       }
     },
     clearCart(state) {
-      state.cart.items = [];
-      state.cart.total = 0;
+      state.items = [];
+      state.total = 0;
     }
   }
   // extraReducers: (builder) => {

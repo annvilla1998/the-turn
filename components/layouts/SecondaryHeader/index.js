@@ -41,7 +41,7 @@ const menuUrls = [
   },
   {
     link: "/the-turn/membership",
-    label: "Buy Membership",
+    label: "Become a Member",
     icon: <CreditCardIcon />
   },
   {
