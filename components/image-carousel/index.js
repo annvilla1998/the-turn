@@ -9,7 +9,13 @@ import "swiper/css/navigation";
 // import required modules
 import { Autoplay, Pagination } from "swiper/modules";
 
-const images = ["/images/bay.jpg", "/images/sofa.jpg", "/images/led.jpg"];
+const images = [
+  "/images/drinks.jpg",
+  "/images/bay.jpg",
+  "/images/inside.jpg",
+  "/images/sofa.jpg",
+  "/images/led.jpg"
+];
 
 export const ImageCarousel = () => {
   return (

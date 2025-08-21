@@ -4,20 +4,12 @@ import { Card, CardContent, Stack, Typography, Grid } from "@mui/material";
 const rates = [
   {
     title: "Early Bird",
-    days: "Monday - Thursday",
-    time: "10am - 2pm",
-    price: "$40/hr"
+    time: "Before 4pm",
+    price: "$35/hr"
   },
   {
-    title: "Mid-week",
-    days: "Monday - Thursday",
-    time: "3pm - 9pm",
-    price: "$50/hr"
-  },
-  {
-    title: "Weekend",
-    days: "Friday - Sunday",
-    time: "10am - 9pm",
+    title: "Regular",
+    time: "After 4pm",
     price: "$50/hr"
   }
 ];
@@ -25,7 +17,7 @@ const rates = [
 export default function HourlyRates() {
   return (
     <>
-      <Typography mb={5} variant="h4" align="center" gutterBottom>
+      <Typography color="white" mb={5} variant="h4" align="center" gutterBottom>
         Hourly Rates
       </Typography>
       <Grid

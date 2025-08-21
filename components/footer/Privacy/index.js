@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Modal, Typography, Box, useTheme } from "@mui/material";
-import styles from "../styles.module.scss";
 
 export const Privacy = ({ style }) => {
   const [open, setOpen] = useState(false);
@@ -8,7 +7,17 @@ export const Privacy = ({ style }) => {
 
   return (
     <>
-      <Typography id="privacy-policy" onClick={() => setOpen(true)}>
+      <Typography
+        id="privacy-policy"
+        onClick={() => setOpen(true)}
+        sx={{
+          cursor: "pointer",
+          color: "#fff",
+          ":hover": {
+            opacity: 0.8
+          }
+        }}
+      >
         Privacy Policy
       </Typography>
       <Modal
@@ -18,17 +27,17 @@ export const Privacy = ({ style }) => {
         aria-describedby="Privacy Policy for The Turn"
       >
         <Box
-          className={styles.footer__privacy}
           sx={{
             ...style,
-            backgroundColor: theme.palette.background.default
+            backgroundColor: theme.palette.background.default,
+            overflowY: "auto"
           }}
         >
           <Typography id="privacy-policy-title" variant="h5" component="h2">
             Privacy Policy for The Turn Golf Simulator & Lounge
           </Typography>
           <br />
-          <Typography id="privacy-policy" variant="p" component="p">
+          <Typography id="privacy-policy" variant="body1" component="p">
             The Turn Golf Simulator & Lounge ("we," "our," "us") is committed to
             protecting the privacy and security of your personal information.
             This Privacy Policy outlines how we collect, use, and protect your
