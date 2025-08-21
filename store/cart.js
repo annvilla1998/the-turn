@@ -2,9 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 /**
  * Item: {
- *  type: reservation | giftCard | membership,
+ *  item: "reservation" | "giftCard" | "membership",
  *  price: number,
- *  details: { bay: number, time: string, service_time: number, date: string, note?: string, occasion?: string },
+ *  details: {
+ *    // For reservations
+ *    bay?: number, time?: string, service_time?: number, date?: string, note?: string, occasion?: string,
+ *    // For memberships
+ *    name?: string, hours?: number, sessionLength?: number, priceId?: string, recurring?: boolean
+ *  },
  * }
  */
 const initialState = {
@@ -24,6 +29,10 @@ const cartSlice = createSlice({
 
       if (item.item === "reservation") {
         state.total += 10; // $10 deposit for reservations
+      } else if (item.item === "membership") {
+        // For memberships, add the full monthly price to show in cart
+        // But we'll handle recurring payments differently in checkout
+        state.total += item.price;
       } else {
         state.total += item.price; // Add full price for other items
       }
@@ -37,6 +46,8 @@ const cartSlice = createSlice({
       if (item) {
         if (item.item === "reservation") {
           state.total -= 10; // $10 deposit for reservations
+        } else if (item.item === "membership") {
+          state.total -= item.price; // Subtract full price for memberships
         } else {
           state.total -= item.price; // Subtract full price for other items
         }

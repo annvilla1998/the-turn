@@ -38,7 +38,7 @@ const menuUrls = [
     icon: <CalendarMonthIcon />
   },
   {
-    link: "/the-turn/membership",
+    link: "/the-turn/memberships",
     label: "Become a Member",
     icon: <CreditCardIcon />
   },
@@ -188,9 +188,17 @@ export default function SecondaryHeader({ children }) {
                     <ListItemText primary="Admin Dashboard" />
                   </ListItemButton>
                 </ListItem>
-                <Divider />
               </>
             )}
+            <ListItem disablePadding>
+              <ListItemButton component={Link} href="/the-turn/dashboard">
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Dashboard" />
+              </ListItemButton>
+            </ListItem>
+            <Divider />
             {menuUrls.map((item, index) => (
               <ListItem key={index} disablePadding>
                 <ListItemButton component={Link} href={item.link}>

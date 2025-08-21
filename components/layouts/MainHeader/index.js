@@ -13,7 +13,7 @@ import Router from "next/router";
 
 const menuUrls = [
   { link: "/the-turn/reserve", label: "Reserve A Bay" },
-  // { link: '/memberships', label: 'Memberships' },
+  { link: "/the-turn/memberships", label: "Memberships" },
   // { link: '/events', label: 'Events' },
   // { link: "/the-turn/gift-cards", label: "Gift Cards" },
   { label: "Subscribe", link: "/" },

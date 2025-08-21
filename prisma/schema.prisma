@@ -25,6 +25,7 @@ model User {
   unsubscribe_token String?   @unique
   unique_str   String       @unique @db.VarChar(25)
   Reservations Reservation[]  
+  Memberships  Membership[]
   created_at   DateTime      @default(now())
   updated_at   DateTime      @updatedAt
 }
@@ -42,4 +43,14 @@ model Reservation {
   occasion       String?
   created_at     DateTime
   updated_at     DateTime @updatedAt
+}
+
+model Membership {
+  id            String  @id @default(uuid())
+  user          User    @relation(fields: [user_id], references: [id])
+  user_id       String
+  curr_credit   Int
+  name          String
+  created_at    DateTime
+  updated_at    DateTime @updatedAt
 }
