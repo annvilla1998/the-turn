@@ -23,7 +23,9 @@ jobs:
         run: npm run build
         
       - name: Add CNAME
-        run: echo "www.theturnvv.com" > out/CNAME
+        run: |
+          mkdir -p out
+          echo "www.theturnvv.com" > out/CNAME
         
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
