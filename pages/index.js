@@ -1,7 +1,7 @@
 import React from "react";
 import MainHeader from "@/components/layouts/MainHeader";
 import { ImageCarousel } from "@/components/image-carousel";
-import HourlyRates from "@/components/hourly-rates";
+import Memberships from "@/components/memberships";
 import {
   Box,
   Container,
@@ -99,7 +99,7 @@ function Home() {
                 WebkitTextFillColor: "transparent",
                 mb: 3,
                 fontSize: "2.5rem",
-                textShadow: "0 4px 20px rgba(0,0,0,0.3)",
+                textShadow: "0 4px 20px rgba(0,0,0,0.30)",
                 "@media (min-width: 900px)": {
                   fontSize: "3.5rem"
                 }
@@ -244,8 +244,8 @@ function Home() {
         </Box>
       </Box>
 
-      {/* Modern Hourly Rates Section */}
-      <Box mt={10} sx={{ position: "relative", zIndex: 1 }}>
+      {/* Memberships Section */}
+      <Box id="memberships" mt={10} sx={{ position: "relative", zIndex: 1 }}>
         <Container maxWidth="md">
           <Paper
             sx={{
@@ -268,7 +268,7 @@ function Home() {
               }
             }}
           >
-            <HourlyRates />
+            <Memberships />
           </Paper>
         </Container>
       </Box>

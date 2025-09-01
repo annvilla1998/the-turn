@@ -1,24 +1,35 @@
 import React from "react";
 import { Card, CardContent, Stack, Typography, Grid } from "@mui/material";
+import Router from "next/router";
 
 const rates = [
   {
-    title: "Early Bird",
-    time: "Before 4pm",
-    price: "$35/hr"
+    title: "Starter Membership",
+    price: "$49.00 per month",
+    link: "https://theturnvv.golfoclock.com/purchase/mem-a11b46ae-ea67-4190-96cd-80d7b9ac5687"
   },
   {
-    title: "Regular",
-    time: "After 4pm",
-    price: "$50/hr"
+    title: "Player Membership",
+    price: "$99.00 per month",
+    link: "https://theturnvv.golfoclock.com/purchase/mem-f0480b87-4528-46c8-a0ef-7e41be611f00"
+  },
+  {
+    title: "Plus Membership",
+    price: "$150.00 per month",
+    link: "https://theturnvv.golfoclock.com/purchase/mem-cd5e6dd1-2d0d-4147-9e78-7f62b0e8925d"
+  },
+  {
+    title: "Elite Membership",
+    price: "$299.00 per month",
+    link: "https://theturnvv.golfoclock.com/purchase/mem-50fa5d83-c9a0-4578-a517-9edc1f51f5b7"
   }
 ];
 
-export default function HourlyRates() {
+export default function Memberships() {
   return (
     <>
       <Typography color="white" mb={5} variant="h4" align="center" gutterBottom>
-        Hourly Rates
+        Memberships
       </Typography>
       <Grid
         container
@@ -39,19 +50,15 @@ export default function HourlyRates() {
                   boxShadow: 6
                 },
                 textAlign: "center",
-                borderRadius: 2
+                borderRadius: 2,
+                cursor: "pointer"
               }}
+              onClick={() => Router.push(rate.link)}
             >
               <CardContent>
                 <Stack spacing={1}>
                   <Typography color="text.primary" variant="h5">
                     {rate.title}
-                  </Typography>
-                  <Typography color="text.primary" variant="subtitle2">
-                    {rate.days}
-                  </Typography>
-                  <Typography color="text.primary" variant="subtitle2">
-                    {rate.time}
                   </Typography>
                   <Typography color="text.primary" variant="h6" mt={2}>
                     {rate.price}
