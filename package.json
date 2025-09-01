@@ -37,7 +37,7 @@
     "formidable": "^3.5.2",
     "formik": "^2.4.6",
     "jsonwebtoken": "^9.0.2",
-    "next": "^15.2.4",
+    "next": "^15.5.2",
     "next-auth": "^4.24.8",
     "next-connect": "^1.0.0",
     "next-redux-wrapper": "^8.1.0",
@@ -52,7 +52,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
     "resend": "^4.2.0",
-    "sass": "^1.79.3",
+    "sass": "^1.91.0",
     "swiper": "^11.2.5",
     "yup": "^1.4.0"
   },

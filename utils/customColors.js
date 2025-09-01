@@ -7,5 +7,5 @@ export const customColors = {
   logoDarkGreen: "#9BF128",
   logoPurple: "#0B1143",
   logoBlue: "#0B2569",
-  errorRed: "#ec3f3f",
+  errorRed: "#ec3f3f"
 };
