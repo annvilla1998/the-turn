@@ -17,7 +17,7 @@ const images = [
   "/images/led.jpg"
 ];
 
-export const ImageCarousel = () => {
+export default function ImageCarousel() {
   return (
     <>
       <GlobalStyles
@@ -61,4 +61,4 @@ export const ImageCarousel = () => {
       </Swiper>
     </>
   );
-};
+}

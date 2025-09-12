@@ -1,17 +1,12 @@
 import React from "react";
 import MainHeader from "@/components/layouts/MainHeader";
-import { ImageCarousel } from "@/components/image-carousel";
-import Memberships from "@/components/memberships";
-import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  useTheme,
-  Chip,
-  Paper
-} from "@mui/material";
-import { GolfCourse, Groups, LocationOn } from "@mui/icons-material";
+import ImageCarousel from "@/components/image-carousel";
+import HeroSection from "@/components/hero-section";
+import AboutSection from "@/components/about-section";
+import VideoSection from "@/components/video-section";
+import PricingSection from "@/components/pricing-section";
+import { Box, Container, Typography, useTheme, Paper } from "@mui/material";
+import { LocationOn } from "@mui/icons-material";
 
 function Home() {
   const theme = useTheme();
@@ -35,243 +30,17 @@ function Home() {
         }
       }}
     >
-      {/* Modern Hero Section with Text Overlay */}
-      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1, mb: 8 }}>
-        <Box
-          sx={{
-            position: "relative",
-            minHeight: "50vh",
-            borderRadius: 4,
-            overflow: "hidden",
-            display: "flex",
-            alignItems: "center",
-            backgroundImage: "url(/images/gameplay.jpg)",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background:
-                "linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(11,17,67,0.8) 50%, rgba(0,0,0,0.6) 100%)",
-              zIndex: 1
-            },
-            "&::after": {
-              content: '""',
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: `radial-gradient(circle at 30% 70%, ${theme.palette.custom.logoLightGreen}20 0%, transparent 50%)`,
-              zIndex: 2
-            }
-          }}
-        >
-          <Container
-            maxWidth="md"
-            sx={{
-              position: "relative",
-              zIndex: 3,
-              textAlign: "center",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              py: 4,
-              "@media (min-width: 900px)": {
-                py: 6,
-                minHeight: "50vh"
-              }
-            }}
-          >
-            <Typography
-              variant="h2"
-              gutterBottom
-              fontWeight="bold"
-              sx={{
-                background: `linear-gradient(45deg, ${theme.palette.common.white}, ${theme.palette.custom.logoLightGreen})`,
-                backgroundClip: "text",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                mb: 3,
-                fontSize: "2.5rem",
-                textShadow: "0 4px 20px rgba(0,0,0,0.30)",
-                "@media (min-width: 900px)": {
-                  fontSize: "3.5rem"
-                }
-              }}
-            >
-              Welcome to The Turn!
-            </Typography>
+      {/* Hero Section */}
+      <HeroSection />
 
-            <Typography
-              variant="h5"
-              sx={{
-                color: theme.palette.custom.logoLightGreen,
-                fontWeight: "bold",
-                mb: 4,
-                textShadow: "0 2px 10px rgba(0,0,0,0.5)"
-              }}
-            >
-              The ultimate indoor golf simulator lounge where technology meets
-              recreation
-            </Typography>
+      {/* About Section */}
+      <AboutSection />
 
-            {/* Feature Chips */}
-            <Box
-              sx={{
-                mb: 4,
-                display: "flex",
-                gap: 2,
-                flexWrap: "wrap",
-                justifyContent: "center"
-              }}
-            >
-              <Chip
-                icon={<GolfCourse />}
-                label="Premium Simulators"
-                size="medium"
-                sx={{
-                  background: `linear-gradient(45deg, ${theme.palette.custom.logoDarkGreen}, ${theme.palette.custom.logoLightGreen})`,
-                  color: theme.palette.common.white,
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                  py: 1,
-                  px: 2,
-                  "& .MuiChip-icon": { color: theme.palette.common.white }
-                }}
-              />
-              <Chip
-                icon={<Groups />}
-                label="Social Experience"
-                size="medium"
-                sx={{
-                  background: `linear-gradient(45deg, ${theme.palette.custom.logoLightGreen}, ${theme.palette.custom.logoDarkGreen})`,
-                  color: theme.palette.common.white,
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                  py: 1,
-                  px: 2,
-                  "& .MuiChip-icon": { color: theme.palette.common.white }
-                }}
-              />
-            </Box>
+      {/* Video Section */}
+      <VideoSection />
 
-            <Typography
-              variant="h6"
-              lineHeight={1.8}
-              sx={{
-                color: theme.palette.common.white,
-                opacity: 0.95,
-                textShadow: "0 2px 10px rgba(0,0,0,0.5)",
-                maxWidth: "800px",
-                mx: "auto"
-              }}
-            >
-              Experience the future of golf in a relaxed, social
-              atmosphere—whether you're an avid golfer or a newcomer, we've got
-              something for everyone.
-            </Typography>
-          </Container>
-        </Box>
-      </Container>
-
-      {/* Additional Content Section */}
-      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1, mb: 8 }}>
-        <Grid container spacing={6} justifyContent="center">
-          <Grid item xs={12} md={10}>
-            <Paper
-              sx={{
-                background: "rgba(255, 255, 255, 0.08)",
-                backdropFilter: "blur(20px)",
-                borderRadius: 4,
-                border: `1px solid rgba(196, 253, 60, 0.2)`,
-                p: 4,
-                boxShadow: "0 25px 50px rgba(0,0,0,0.2)"
-              }}
-            >
-              <Typography
-                variant="body1"
-                lineHeight={1.8}
-                textAlign="center"
-                sx={{
-                  color: theme.palette.common.white,
-                  fontSize: "1.1rem",
-                  opacity: 0.95
-                }}
-              >
-                We offer an immersive golfing experience using state-of-the-art
-                ball tracking and club data analytics, designed to cater to golf
-                enthusiasts of all skill levels. Our advanced simulators provide
-                highly accurate, real-time data on ball speed, spin, launch
-                angle, and more, giving you the insights you need to refine your
-                game or simply enjoy a fun, stress-free round.
-                <br />
-                <br />
-                Whether you're looking to work on your swing, compete with
-                friends, or unwind with a casual round in a comfortable and
-                stylish environment, The Turn offers the perfect space.
-                Featuring a variety of virtual courses from around the world,
-                our simulators create an authentic golfing experience, all while
-                you relax with food, drinks, and entertainment. Our lounge is
-                ideal for corporate events, casual hangouts, or golf lessons
-                with expert instructors (coming soon).
-              </Typography>
-            </Paper>
-          </Grid>
-        </Grid>
-      </Container>
-
-      {/* Grand Opening Video Section */}
-      <Box mt={10} sx={{ position: "relative", zIndex: 1, width: "100%" }}>
-        <Box
-          component="video"
-          controls
-          sx={{
-            width: "100%",
-            maxHeight: "60vh",
-            display: "block",
-            boxShadow: "0 15px 30px rgba(0,0,0,0.4)"
-          }}
-          poster="/images/gameplay.jpg" // Fallback poster image
-        >
-          <source src="/mp4/grand-opening.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </Box>
-      </Box>
-
-      {/* Memberships Section */}
-      <Box id="memberships" mt={10} sx={{ position: "relative", zIndex: 1 }}>
-        <Container maxWidth="md">
-          <Paper
-            sx={{
-              background: "rgba(255, 255, 255, 0.1)",
-              backdropFilter: "blur(20px)",
-              borderRadius: 4,
-              border: `1px solid rgba(196, 253, 60, 0.2)`,
-              p: 4,
-              boxShadow: "0 25px 50px rgba(0,0,0,0.3)",
-              position: "relative",
-              overflow: "hidden",
-              "&::before": {
-                content: '""',
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "2px",
-                background: `linear-gradient(90deg, ${theme.palette.custom.logoLightGreen}, ${theme.palette.custom.logoDarkGreen})`
-              }
-            }}
-          >
-            <Memberships />
-          </Paper>
-        </Container>
-      </Box>
+      {/* Pricing Section */}
+      <PricingSection />
 
       {/* Enhanced Carousel Section */}
       <Box

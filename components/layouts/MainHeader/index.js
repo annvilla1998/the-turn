@@ -12,7 +12,7 @@ const menuUrls = [
     link: "https://theturnvv.golfoclock.com/",
     label: "Reserve"
   },
-  { link: "#memberships", label: "Memberships" },
+  { link: "#pricing", label: "Pricing & Memberships" },
   // { link: '/events', label: 'Events' },
   // { link: "/the-turn/gift-cards", label: "Gift Cards" },
   // { link: '/about-us', label: 'About Us' },
