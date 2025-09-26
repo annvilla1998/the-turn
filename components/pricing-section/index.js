@@ -45,7 +45,7 @@ export default function PricingSection() {
   return (
     <Box id="pricing" mt={10} sx={{ position: "relative", zIndex: 1 }}>
       <Container maxWidth="lg">
-        {/* Per-Person Pricing */}
+        {/* General Per-Person Pricing */}
         <Paper
           sx={{
             background: "rgba(255, 255, 255, 0.1)",
@@ -82,9 +82,8 @@ export default function PricingSection() {
               mb: 3
             }}
           >
-            PER-PERSON PRICING
+            GENERAL PER-PERSON PRICING
           </Typography>
-
           <Grid container spacing={3} justifyContent="center">
             <Grid item xs={12} md={6}>
               <Box sx={{ textAlign: "center", mb: 2 }}>
@@ -95,7 +94,7 @@ export default function PricingSection() {
                     fontWeight: "bold"
                   }}
                 >
-                  Mon-Thu
+                  Mon-Thurs (before 2pm)
                 </Typography>
                 <Typography
                   variant="h5"
@@ -104,7 +103,7 @@ export default function PricingSection() {
                     fontWeight: "bold"
                   }}
                 >
-                  $12/hr per person
+                  $40/hr
                 </Typography>
               </Box>
             </Grid>
@@ -117,7 +116,7 @@ export default function PricingSection() {
                     fontWeight: "bold"
                   }}
                 >
-                  Fri-Sun
+                  Mon-Thurs (after 2pm)
                 </Typography>
                 <Typography
                   variant="h5"
@@ -126,31 +125,36 @@ export default function PricingSection() {
                     fontWeight: "bold"
                   }}
                 >
-                  $17/hr per person
+                  $50/hr
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Box sx={{ textAlign: "center", mb: 2 }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: theme.palette.custom.logoLightGreen,
+                    fontWeight: "bold"
+                  }}
+                >
+                  Fri-Sun (all day)
+                </Typography>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    color: theme.palette.common.white,
+                    fontWeight: "bold"
+                  }}
+                >
+                  $50/hr
                 </Typography>
               </Box>
             </Grid>
           </Grid>
-
-          <Box sx={{ textAlign: "center", mt: 3 }}>
-            <Typography
-              sx={{
-                color: theme.palette.common.white,
-                opacity: 0.9,
-                mb: 1
-              }}
-            >
-              Solo players pay less. Groups scale fairly.
-            </Typography>
-            <Typography
-              sx={{ color: theme.palette.common.white, opacity: 0.9 }}
-            >
-              Bay caps keep things affordable.
-            </Typography>
-          </Box>
         </Paper>
 
-        {/* Membership Credit Packs */}
+        {/* Membership Credit Packs  */}
         <Paper
           sx={{
             background: "rgba(255, 255, 255, 0.1)",
@@ -189,6 +193,18 @@ export default function PricingSection() {
             MEMBERSHIP CREDIT PACKS
           </Typography>
 
+          <Box sx={{ textAlign: "center", mt: 3, mb: 3 }}>
+            <Typography
+              sx={{ color: theme.palette.common.white, opacity: 0.9, mb: 1 }}
+            >
+              Solo players pay less. Groups scale fairly.
+            </Typography>
+            <Typography
+              sx={{ color: theme.palette.common.white, opacity: 0.9 }}
+            >
+              Bay caps keep things affordable.
+            </Typography>
+          </Box>
           <Box sx={{ textAlign: "center", mb: 4 }}>
             <Typography sx={{ color: theme.palette.common.white, mb: 1 }}>
               One credit = one hour of play for one person.
@@ -284,15 +300,75 @@ export default function PricingSection() {
                   <Typography sx={{ mb: 1 }}>
                     • Share credits with friends
                   </Typography>
+                  <Typography sx={{ mb: 1 }}>• Exclusive prices</Typography>
                 </Box>
-              </Grid>
-              <Grid item xs={12} md={6}>
                 <Box sx={{ color: theme.palette.common.white }}>
                   <Typography sx={{ mb: 1 }}>
                     • Free guest pass each month (Player tier & above)
                   </Typography>
                   <Typography sx={{ mb: 1 }}>
                     • 10% off drinks/snacks
+                  </Typography>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+
+          <Box sx={{ mt: 5, mb: 5 }}>
+            <Typography
+              variant="h5"
+              align="center"
+              gutterBottom
+              sx={{
+                color: theme.palette.custom.logoLightGreen,
+                fontWeight: "bold",
+                mb: 2
+              }}
+            >
+              Member Per-Person Pricing
+            </Typography>
+            <Grid container spacing={3} justifyContent="center">
+              <Grid item xs={12} md={6}>
+                <Box sx={{ textAlign: "center", mb: 2 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: theme.palette.custom.logoLightGreen,
+                      fontWeight: "bold"
+                    }}
+                  >
+                    Mon-Thu
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      color: theme.palette.common.white,
+                      fontWeight: "bold"
+                    }}
+                  >
+                    $12/hr per person
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Box sx={{ textAlign: "center", mb: 2 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: theme.palette.custom.logoLightGreen,
+                      fontWeight: "bold"
+                    }}
+                  >
+                    Fri-Sun
+                  </Typography>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      color: theme.palette.common.white,
+                      fontWeight: "bold"
+                    }}
+                  >
+                    $17/hr per person
                   </Typography>
                 </Box>
               </Grid>
