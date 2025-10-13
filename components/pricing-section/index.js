@@ -79,10 +79,20 @@ export default function PricingSection() {
               backgroundClip: "text",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
-              mb: 3
+              mb: 1
             }}
           >
-            GENERAL PER-PERSON PRICING
+            GENERAL HOURLY PRICING
+          </Typography>
+          <Typography
+            sx={{
+              color: theme.palette.common.white,
+              opacity: 0.9,
+              mb: 3,
+              textAlign: "center"
+            }}
+          >
+            ** Up to 5 people per bay **
           </Typography>
           <Grid container spacing={3} justifyContent="center">
             <Grid item xs={12} md={6}>
