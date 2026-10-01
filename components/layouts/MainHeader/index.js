@@ -7,9 +7,8 @@ import { Box, Modal, Typography, useTheme } from "@mui/material";
 import Button from "@/components/buttons/button";
 
 const menuUrls = [
-  // { link: "/the-turn/reserve", label: "Reserve" },
   {
-    link: "https://theturnvv.golfoclock.com/",
+    link: "https://app.birdiegrow.com/book/the-turn/bay",
     label: "Reserve"
   },
   { link: "#pricing", label: "Pricing & Memberships" },
